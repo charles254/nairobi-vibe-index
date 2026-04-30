@@ -192,9 +192,11 @@
   </ul>
 
   <h2>How the score works</h2>
-  <p>NVI's vibe score is a weekly foot-traffic forecast — not real-time. It comes from <a href="https://besttime.app" target="_blank" rel="noopener">BestTime.app</a>'s API, which builds 7-day × 24-hour heatmaps from public Google Popular Times data and anonymous mobility signals.</p>
+  <p>NVI's vibe score is a foot-traffic forecast — not real-time. The dataset is a <strong>snapshot of typical weekly patterns</strong> for each venue, captured in April 2026 and frozen in place. Forecasts represent how busy a venue <em>usually</em> is at any given day-and-hour, normalized to that venue's own busiest hour.</p>
 
-  <p>Each venue gets a <strong>0–100% intensity</strong> for every hour of the week, normalized to that venue's own busiest hour. So a 100% means "this venue is at its absolute weekly peak right now."</p>
+  <p>Each venue gets a <strong>0–100% intensity</strong> for every hour of the week. A score of 100% means <em>"this venue is at its absolute weekly peak right now."</em> A score of 30% means <em>"this venue is at 30% of its busiest hour."</em></p>
+
+  <p>Why a frozen snapshot? Foot-traffic <em>forecasts</em> represent typical patterns — they don't shift meaningfully week-to-week. Freezing the data eliminates ongoing API costs, vendor lock-in, and maintenance risk in exchange for losing the ability to detect slow drift over months.</p>
 
   <div class="formula">
     <span class="comment"># Citywide NVI = average across open venues at current Nairobi day & hour</span><br>
@@ -213,10 +215,10 @@
 
   <h2>Coverage limits</h2>
   <div class="callout">
-    <strong>22 of Nairobi's nightlife spots are tracked.</strong> Many iconic venues (B-Club, Kiza Lounge, Alchemist, Mojos) are absent because they don't have enough public foot-traffic data for BestTime to fit a forecast. We're working on a separate data pipeline to add them.
+    <strong>22 of Nairobi's nightlife spots are tracked.</strong> Many iconic venues (B-Club, Kiza Lounge, Alchemist, Mojos) are absent because their public foot-traffic data wasn't sufficient at the time the snapshot was taken. Adding them requires a separate data pipeline — community-contributed reports being a likely path.
   </div>
 
-  <p>NVI is <strong>not</strong> a real-time tracker. It's a forecast — it tells you what each venue's typical pattern looks like for the current day-of-week and hour. The data refreshes weekly via an automated cron job.</p>
+  <p>NVI is <strong>not</strong> a real-time tracker. It's a forecast snapshot — it tells you what each venue's typical pattern looks like for the current day-of-week and hour. The data is intentionally static.</p>
 
   <h2>Alcoblow / safety panel</h2>
   <p>NVI includes a community-aggregated list of common Nairobi alcoblow (police breathalyzer) checkpoint zones. The data is reference intel — police rotate locations and checkpoints can appear anywhere at any time.</p>
@@ -242,10 +244,11 @@
 
   <h2>Stack</h2>
   <ul>
-    <li><strong>Data:</strong> <a href="https://besttime.app" target="_blank" rel="noopener">BestTime.app</a> foot-traffic API</li>
-    <li><strong>Backend:</strong> Python 3 + SQLite, weekly Windows scheduled task</li>
-    <li><strong>Frontend:</strong> Static HTML + vanilla CSS/JS — no framework, no analytics, no cookies</li>
+    <li><strong>Data:</strong> Frozen foot-traffic snapshot in SQLite — 22 venues × 168 hours, captured April 2026</li>
+    <li><strong>Build:</strong> Python 3 reads SQLite, writes <code>web/index.html</code> with all venue data embedded inline</li>
+    <li><strong>Frontend:</strong> Static HTML + vanilla CSS/JS — no framework, no analytics, no cookies, no third-party APIs at runtime</li>
     <li><strong>Hosting:</strong> GitHub Pages (free)</li>
+    <li><strong>Recurring cost:</strong> $0/mo — there is no backend, no API key, no subscription</li>
     <li><strong>Source:</strong> <a href="https://github.com/charles254/nairobi-vibe-index" target="_blank" rel="noopener">github.com/charles254/nairobi-vibe-index</a></li>
   </ul>
 
