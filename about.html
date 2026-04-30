@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>About NVI — Methodology, Mission, Coverage</title>
+<meta name="description" content="How the Nairobi Vibe Index is built — methodology, data sources, coverage limits, and the harm-reduction mission behind it.">
+<meta name="theme-color" content="#07080d">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://charles254.github.io/nairobi-vibe-index/about.html">
+<meta property="og:title" content="About NVI — Methodology &amp; Mission">
+<meta property="og:description" content="How the Nairobi Vibe Index is built. The data, the score, and why we made it.">
+<meta property="og:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%2307080d%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%23ff2d92%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.35em%22%20font-family%3D%22monospace%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ff2d92%22%3ENVI%3C%2Ftext%3E%3C%2Fsvg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #07080d;
+    --bg-card: #0e1019;
+    --border: #1c2237;
+    --text: #e8edf7;
+    --text-dim: #8896b8;
+    --text-faint: #4d5878;
+    --magenta: #ff2d92;
+    --cyan: #00d6ff;
+    --yellow: #ffcc00;
+    --red: #ff3355;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    background:
+      radial-gradient(ellipse at top, rgba(255, 45, 146, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(0, 214, 255, 0.05), transparent 50%),
+      var(--bg);
+    color: var(--text);
+    line-height: 1.6;
+    min-height: 100vh;
+    padding: 2.5rem 1rem 4rem;
+    -webkit-font-smoothing: antialiased;
+  }
+  .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  .container { max-width: 760px; margin: 0 auto; }
+
+  .nav {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.25rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    flex-wrap: wrap;
+  }
+  .pixel-mark {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    color: var(--magenta);
+    text-shadow: 0 0 12px rgba(255, 45, 146, 0.4);
+    text-decoration: none;
+    letter-spacing: 0.05em;
+  }
+  .nav a {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    text-decoration: none;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.875rem;
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    transition: all 0.15s ease;
+  }
+  .nav a:hover {
+    border-color: var(--magenta);
+    color: var(--text);
+  }
+
+  h1 {
+    font-size: clamp(1.75rem, 4vw, 2.5rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.625rem;
+  }
+  .lede {
+    color: var(--text-dim);
+    font-size: 1.0625rem;
+    margin-bottom: 2.5rem;
+    line-height: 1.6;
+  }
+  .lede strong { color: var(--text); }
+
+  h2 {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--cyan);
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.625rem;
+    border-bottom: 1px solid var(--border);
+  }
+  h3 {
+    font-size: 1.0625rem;
+    font-weight: 600;
+    margin: 1.5rem 0 0.5rem;
+    color: var(--text);
+  }
+  p, ul, ol {
+    color: var(--text-dim);
+    margin-bottom: 1rem;
+    font-size: 0.9375rem;
+  }
+  ul, ol { padding-left: 1.5rem; }
+  li { margin-bottom: 0.4rem; }
+  strong { color: var(--text); font-weight: 600; }
+  a { color: var(--cyan); text-decoration: underline; text-underline-offset: 3px; }
+  a:hover { color: var(--magenta); }
+  code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125em;
+    padding: 0.1rem 0.4rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text);
+  }
+
+  .formula {
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    line-height: 1.7;
+    color: var(--text);
+    overflow-x: auto;
+  }
+  .formula .comment { color: var(--text-faint); }
+
+  .callout {
+    margin: 1.25rem 0;
+    padding: 1.125rem 1.25rem;
+    background: rgba(255, 45, 146, 0.06);
+    border-left: 3px solid var(--magenta);
+    border-radius: 4px;
+    color: var(--text);
+  }
+  .callout-warn {
+    background: rgba(255, 51, 85, 0.06);
+    border-left-color: var(--red);
+  }
+
+  footer {
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <nav class="nav">
+    <a href="/nairobi-vibe-index/" class="pixel-mark">NVI</a>
+    <a href="/nairobi-vibe-index/">← Dashboard</a>
+    <a href="https://github.com/charles254/nairobi-vibe-index" target="_blank" rel="noopener">GitHub</a>
+  </nav>
+
+  <h1>About NVI</h1>
+  <p class="lede">The <strong>Nairobi Vibe Index</strong> is a public, research-grade dashboard that scores Nairobi nightlife venues by foot-traffic forecasts. Think of it as <em>"the data the city is too drunk to notice."</em></p>
+
+  <h2>What it is</h2>
+  <p>NVI tracks 22 Nairobi clubs, bars, and restaurants across 11 city areas — Westlands, Kilimani, CBD, Lang'ata, Karen, Upper Hill, and more. For each venue, NVI shows:</p>
+  <ul>
+    <li><strong>A 0–100% intensity score</strong> for the current Nairobi day-of-week and hour, normalized against that venue's own peak.</li>
+    <li><strong>A 24-hour bar chart</strong> of today's typical foot-traffic curve.</li>
+    <li><strong>A status badge</strong> — PEAK FLOOR / HIGH FLOOR / MOD FLOOR / BUILDING / LOW FLOOR / CLOSED — based on current intensity.</li>
+    <li><strong>Citywide metrics</strong> — overall NVI, hottest venue right now, count of open venues.</li>
+  </ul>
+
+  <h2>How the score works</h2>
+  <p>NVI's vibe score is a weekly foot-traffic forecast — not real-time. It comes from <a href="https://besttime.app" target="_blank" rel="noopener">BestTime.app</a>'s API, which builds 7-day × 24-hour heatmaps from public Google Popular Times data and anonymous mobility signals.</p>
+
+  <p>Each venue gets a <strong>0–100% intensity</strong> for every hour of the week, normalized to that venue's own busiest hour. So a 100% means "this venue is at its absolute weekly peak right now."</p>
+
+  <div class="formula">
+    <span class="comment"># Citywide NVI = average across open venues at current Nairobi day & hour</span><br>
+    citywide_NVI = mean([v.intensity for v in venues if v.is_open])<br><br>
+    <span class="comment"># Status thresholds</span><br>
+    PEAK     ≥ 80%<br>
+    HIGH     ≥ 60%<br>
+    MOD      ≥ 40%<br>
+    BUILDING ≥ 20%<br>
+    LOW      &gt;  0%<br>
+    CLOSED   = no signal
+  </div>
+
+  <h3>What "PEAKS NOW" means</h3>
+  <p>A venue is flagged with <code>★ Peaks now</code> when its current hour matches its single highest-intensity hour of the entire week (and that peak is ≥ 60%). It means: <em>"of all the times you could go here, right now is when it's busiest."</em></p>
+
+  <h2>Coverage limits</h2>
+  <div class="callout">
+    <strong>22 of Nairobi's nightlife spots are tracked.</strong> Many iconic venues (B-Club, Kiza Lounge, Alchemist, Mojos) are absent because they don't have enough public foot-traffic data for BestTime to fit a forecast. We're working on a separate data pipeline to add them.
+  </div>
+
+  <p>NVI is <strong>not</strong> a real-time tracker. It's a forecast — it tells you what each venue's typical pattern looks like for the current day-of-week and hour. The data refreshes weekly via an automated cron job.</p>
+
+  <h2>Alcoblow / safety panel</h2>
+  <p>NVI includes a community-aggregated list of common Nairobi alcoblow (police breathalyzer) checkpoint zones. The data is reference intel — police rotate locations and checkpoints can appear anywhere at any time.</p>
+
+  <div class="callout callout-warn">
+    <strong>Drink-driving is illegal in Kenya.</strong> Under the Traffic Act, you risk license suspension, fines up to KSh 100,000, and imprisonment up to 2 years. <strong>NVI does not help anyone evade lawful police checks.</strong> The zone list exists so you plan your ride home <em>before</em> your first drink.
+  </div>
+
+  <p>If you've been drinking, book a Bolt, Uber, Faras, or Little ride from inside the venue. Don't drive. Helpful numbers:</p>
+  <ul>
+    <li><strong>NTSA Helpline:</strong> 0709 802 020</li>
+    <li><strong>Police Emergency:</strong> 999 / 112</li>
+    <li><strong>Kenya Red Cross:</strong> 1199</li>
+  </ul>
+
+  <h2>Why we built it</h2>
+  <p>Every Nairobian has spent a 2,000-shilling Uber to a club that turned out to be empty. That's the obvious value: <strong>don't waste money chasing the wrong vibe.</strong></p>
+  <p>The less obvious value: a public, transparent, research-grade view of how the city moves at night. NVI is inspired by <a href="https://www.pizzint.watch" target="_blank" rel="noopener">PizzINT</a>'s observation that public foot-traffic data, made legible, becomes a kind of soft intelligence — interesting on its own merits.</p>
+  <p>NVI is small, free, and built with care. It's a research/entertainment project — not an authoritative source.</p>
+
+  <h2>Disclaimer</h2>
+  <p>NVI is a research/entertainment project. Vibe scores are statistical estimates from public data — not real-time, not predictions. Do not make critical decisions based on NVI. The site does not endorse driving under the influence under any circumstances. Always plan a safe ride home.</p>
+
+  <h2>Stack</h2>
+  <ul>
+    <li><strong>Data:</strong> <a href="https://besttime.app" target="_blank" rel="noopener">BestTime.app</a> foot-traffic API</li>
+    <li><strong>Backend:</strong> Python 3 + SQLite, weekly Windows scheduled task</li>
+    <li><strong>Frontend:</strong> Static HTML + vanilla CSS/JS — no framework, no analytics, no cookies</li>
+    <li><strong>Hosting:</strong> GitHub Pages (free)</li>
+    <li><strong>Source:</strong> <a href="https://github.com/charles254/nairobi-vibe-index" target="_blank" rel="noopener">github.com/charles254/nairobi-vibe-index</a></li>
+  </ul>
+
+  <h2>Contact</h2>
+  <p>Found a bug? Want a venue added? Open an <a href="https://github.com/charles254/nairobi-vibe-index/issues" target="_blank" rel="noopener">issue on GitHub</a>.</p>
+
+  <footer>NVI — Nairobi Vibe Index · Made in Nairobi · Forecast data, not real-time. Drink responsibly.</footer>
+</div>
+</body>
+</html>
