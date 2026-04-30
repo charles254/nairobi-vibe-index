@@ -331,6 +331,49 @@
     gap: 1.25rem;
   }
   .card.hidden { display: none; }
+
+  /* "PEAKS NOW" — fires when card's current intensity equals its weekly max */
+  .card.peaks-now {
+    box-shadow: 0 0 0 1px var(--magenta), 0 0 24px rgba(255, 45, 146, 0.25);
+  }
+  .peaks-now-badge {
+    position: absolute;
+    top: 0.875rem;
+    right: 0.875rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.3rem 0.55rem;
+    background: var(--magenta);
+    color: white;
+    border-radius: 4px;
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.5);
+    animation: peaksPulse 2.4s infinite;
+    z-index: 2;
+  }
+  @keyframes peaksPulse {
+    0%, 100% { box-shadow: 0 0 12px rgba(255, 45, 146, 0.5); }
+    50%      { box-shadow: 0 0 22px rgba(255, 45, 146, 0.85); }
+  }
+
+  /* Brief flash when a card is targeted via "Hottest" click */
+  @keyframes cardFlash {
+    0%   { box-shadow: 0 0 0 2px var(--magenta), 0 0 32px rgba(255, 45, 146, 0.6); }
+    100% { box-shadow: none; }
+  }
+  .card.flash { animation: cardFlash 1.6s ease-out; }
+
+  /* Hottest in status bar is now clickable */
+  #hottest.clickable {
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-color: rgba(255, 45, 146, 0.4);
+    text-underline-offset: 4px;
+    transition: color 0.15s ease;
+  }
+  #hottest.clickable:hover { color: var(--magenta); }
   .grid-empty {
     grid-column: 1 / -1;
     text-align: center;
@@ -979,6 +1022,18 @@ function renderChart(dayHours, currentHour) {
   }).join('');
 }
 
+function venueWeeklyPeak(venueId) {
+  const grid = DATA.heatmaps[venueId] || [];
+  let peak = 0;
+  for (const day of grid) {
+    if (!day) continue;
+    for (const v of day) {
+      if (isOpen(v) && v > peak) peak = v;
+    }
+  }
+  return peak;
+}
+
 function renderCard(venue, dayInt, hour) {
   const dayHours = (DATA.heatmaps[venue.id] || [])[dayInt] || new Array(24).fill(null);
   const current = dayHours[hour];
@@ -986,6 +1041,11 @@ function renderCard(venue, dayInt, hour) {
 
   const badge = isVenueOpen ? classify(current) : { cls: 'badge-closed', text: 'CLOSED', arrow: '' };
   const closedClass = isVenueOpen ? '' : 'closed';
+  const weeklyPeak = venueWeeklyPeak(venue.id);
+  // "Peaks now" = currently at venue's weekly max AND that max is meaningful (>= 60).
+  const peaksNow = isVenueOpen && weeklyPeak >= 60 && current === weeklyPeak;
+  const peaksClass = peaksNow ? ' peaks-now' : '';
+  const peaksBadge = peaksNow ? `<span class="peaks-now-badge">★ Peaks now</span>` : '';
 
   const ratingHtml = venue.rating
     ? `<span class="card-rating mono"><span class="star">★</span> ${venue.rating.toFixed(1)}</span>`
@@ -998,7 +1058,8 @@ function renderCard(venue, dayInt, hour) {
   const catSafe = cat.replace(/[^A-Za-z]/g, '');
 
   return `
-    <article class="card ${closedClass}" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}" data-name="${escapeHtml(venue.name.toLowerCase())}">
+    <article class="card ${closedClass}${peaksClass}" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}" data-name="${escapeHtml(venue.name.toLowerCase())}" data-vid="${escapeHtml(venue.id)}">
+      ${peaksBadge}
       <div class="card-head">
         <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
         <h3 class="card-name">${escapeHtml(venue.name)}</h3>
@@ -1037,12 +1098,15 @@ function render() {
   });
   const open = scores.filter(s => s.score !== null).sort((a, b) => b.score - a.score);
 
+  const hottestEl = document.getElementById('hottest');
   if (open.length === 0) {
     document.getElementById('citywide').textContent = '0%';
     document.getElementById('citywide-status').textContent = 'ASLEEP';
     document.getElementById('citywide-status').style.color = 'var(--text-dim)';
     document.getElementById('open-count').textContent = `0/${scores.length}`;
-    document.getElementById('hottest').textContent = '—';
+    hottestEl.textContent = '—';
+    hottestEl.classList.remove('clickable');
+    hottestEl.dataset.vid = '';
   } else {
     const avg = Math.round(open.reduce((s, v) => s + v.score, 0) / open.length);
     const cls = classify(avg);
@@ -1055,7 +1119,9 @@ function render() {
       avg >= 20 ? 'var(--green)' :
                   'var(--cyan)';
     document.getElementById('open-count').textContent = `${open.length}/${scores.length}`;
-    document.getElementById('hottest').textContent = open[0].name.length > 18 ? open[0].name.slice(0, 16) + '…' : open[0].name;
+    hottestEl.textContent = open[0].name.length > 18 ? open[0].name.slice(0, 16) + '…' : open[0].name;
+    hottestEl.classList.add('clickable');
+    hottestEl.dataset.vid = open[0].id;
   }
 
   // Cards: open venues first (by score desc), then closed
@@ -1175,6 +1241,27 @@ hideClosedBtn.addEventListener('click', () => {
   hideClosedBtn.classList.toggle('active', filters.hideClosed);
   hideClosedBtn.setAttribute('aria-pressed', String(filters.hideClosed));
   applyFilters();
+});
+
+// Click "Hottest" in the status bar -> scroll to that card and flash it.
+document.getElementById('hottest').addEventListener('click', () => {
+  const vid = document.getElementById('hottest').dataset.vid;
+  if (!vid) return;
+  const card = document.querySelector(`.card[data-vid="${CSS.escape(vid)}"]`);
+  if (!card) return;
+  // If filters are hiding it, clear filters so it's visible.
+  if (card.classList.contains('hidden')) {
+    filters.area = 'all';
+    filters.category = 'all';
+    filters.search = '';
+    document.getElementById('search-input').value = '';
+    renderFilterStrip();
+    applyFilters();
+  }
+  card.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  card.classList.remove('flash');
+  void card.offsetWidth;  // restart animation
+  card.classList.add('flash');
 });
 
 renderFilterStrip();
