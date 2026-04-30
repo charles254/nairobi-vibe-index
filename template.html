@@ -1016,7 +1016,7 @@
       <div class="status-cell-value mono" id="citywide-status">--</div>
     </div>
     <div class="status-cell">
-      <div class="status-cell-label">Open</div>
+      <div class="status-cell-label">Tracked Open</div>
       <div class="status-cell-value mono" id="open-count">--</div>
     </div>
     <div class="status-cell">
@@ -1109,7 +1109,7 @@
 
   <footer>
     <p><strong>Methodology:</strong> Vibe scores are foot-traffic forecasts (0–100% relative to each venue's own peak) — a snapshot of typical weekly patterns. The badge for each venue reflects its current intensity for the present Nairobi day-of-week and hour. The chart inside each card is today's full 24-hour curve. <a href="about.html" style="color: var(--cyan)">Read full methodology →</a></p>
-    <p><strong>Coverage:</strong> 22 Nairobi venues across 11 areas. Forecasts are static (a deliberate freeze) — they represent typical patterns that don't shift week-to-week. Adding new venues is a manual, occasional process.</p>
+    <p><strong>Coverage:</strong> 287 Nairobi venues across 25+ areas — <strong>22 tracked</strong> (with foot-traffic forecasts) and <strong>265 listed</strong> (awaiting community-submitted data). Listed venues show a "Report this venue" button to crowdsource their patterns.</p>
     <p><strong>Forecast snapshot:</strong> April 2026 · <strong>Page generated:</strong> <span class="mono" id="generated-at">--</span></p>
     <p style="margin-top: 1rem;"><a href="about.html" style="color: var(--cyan)">About NVI</a> · <a href="https://github.com/charles254/nairobi-vibe-index" target="_blank" rel="noopener" style="color: var(--cyan)">GitHub</a></p>
     <div class="disclaimer">
@@ -1323,7 +1323,11 @@ function render() {
     document.getElementById('citywide').textContent = '0%';
     document.getElementById('citywide-status').textContent = 'ASLEEP';
     document.getElementById('citywide-status').style.color = 'var(--text-dim)';
-    document.getElementById('open-count').textContent = `0/${scores.length}`;
+    {
+      const listed = (DATA.listed_venues || []).length;
+      const suffix = listed > 0 ? ` · +${listed}` : '';
+      document.getElementById('open-count').textContent = `0/${scores.length}${suffix}`;
+    }
     hottestEl.textContent = '—';
     hottestEl.classList.remove('clickable');
     hottestEl.dataset.vid = '';
@@ -1338,7 +1342,11 @@ function render() {
       avg >= 40 ? 'var(--yellow)' :
       avg >= 20 ? 'var(--green)' :
                   'var(--cyan)';
-    document.getElementById('open-count').textContent = `${open.length}/${scores.length}`;
+    {
+      const listed = (DATA.listed_venues || []).length;
+      const suffix = listed > 0 ? ` · +${listed}` : '';
+      document.getElementById('open-count').textContent = `${open.length}/${scores.length}${suffix}`;
+    }
     hottestEl.textContent = open[0].name.length > 18 ? open[0].name.slice(0, 16) + '…' : open[0].name;
     hottestEl.classList.add('clickable');
     hottestEl.dataset.vid = open[0].id;
