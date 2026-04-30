@@ -135,12 +135,63 @@
   }
   .status-cell-value.accent { color: var(--magenta); }
 
+  /* ============ Filter chip strip ============ */
+  .filter-strip {
+    display: flex;
+    gap: 0.5rem;
+    margin-bottom: 1.75rem;
+    overflow-x: auto;
+    padding-bottom: 0.5rem;
+    scrollbar-width: thin;
+    scrollbar-color: var(--border) transparent;
+  }
+  .filter-strip::-webkit-scrollbar { height: 4px; }
+  .filter-strip::-webkit-scrollbar-track { background: transparent; }
+  .filter-strip::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .chip {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.5rem 0.875rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    color: var(--text-dim);
+    cursor: pointer;
+    transition: all 0.15s ease;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    white-space: nowrap;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .chip:hover {
+    border-color: var(--magenta);
+    color: var(--text);
+  }
+  .chip.active {
+    background: var(--magenta);
+    border-color: var(--magenta);
+    color: white;
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.4);
+  }
+  .chip-count {
+    font-weight: 500;
+    opacity: 0.7;
+    font-size: 0.625rem;
+  }
+  .chip.active .chip-count { opacity: 0.9; }
+
   /* ============ Card grid ============ */
   .grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
     gap: 1.25rem;
   }
+  .card.hidden { display: none; }
   .card {
     position: relative;
     background: var(--bg-card);
@@ -178,9 +229,27 @@
     width: 24px;
     height: 24px;
     flex-shrink: 0;
-    color: var(--magenta);
-    filter: drop-shadow(0 0 6px rgba(255, 45, 146, 0.4));
   }
+  .card-icon.cat-Nightclub  { color: var(--magenta); filter: drop-shadow(0 0 6px rgba(255, 45, 146, 0.4)); }
+  .card-icon.cat-Bar        { color: var(--cyan);    filter: drop-shadow(0 0 6px rgba(0, 214, 255, 0.4)); }
+  .card-icon.cat-Restaurant { color: var(--orange);  filter: drop-shadow(0 0 6px rgba(255, 140, 51, 0.4)); }
+  .card-icon.cat-Venue      { color: var(--text-dim); }
+  .card-cat {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    padding: 0.2rem 0.5rem;
+    border: 1px solid currentColor;
+    border-radius: 4px;
+    margin-right: 0.5rem;
+  }
+  .card-cat.cat-Nightclub  { color: var(--magenta); }
+  .card-cat.cat-Bar        { color: var(--cyan); }
+  .card-cat.cat-Restaurant { color: var(--orange); }
+  .card-cat.cat-Venue      { color: var(--text-dim); }
   .card-name {
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9375rem;
@@ -377,6 +446,8 @@
     </div>
   </div>
 
+  <div class="filter-strip" id="filter-strip"></div>
+
   <div class="grid" id="grid"></div>
 
   <footer>
@@ -391,10 +462,25 @@
 
 <!-- SVG icon used for each card head -->
 <svg width="0" height="0" style="position:absolute">
-  <symbol id="icon-vibe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+  <symbol id="icon-Nightclub" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M9 18V5l12-2v13"/>
     <circle cx="6" cy="18" r="3"/>
     <circle cx="18" cy="16" r="3"/>
+  </symbol>
+  <symbol id="icon-Bar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 22h8"/>
+    <path d="M12 11v11"/>
+    <path d="M3 4h18l-9 9z"/>
+  </symbol>
+  <symbol id="icon-Restaurant" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M3 2v7c0 1.1.9 2 2 2h4a2 2 0 0 0 2-2V2"/>
+    <path d="M7 2v20"/>
+    <path d="M21 15V2a5 5 0 0 0-5 5v6c0 1.1.9 2 2 2h3z"/>
+    <path d="M21 15v7"/>
+  </symbol>
+  <symbol id="icon-Venue" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="12" cy="12" r="3"/>
+    <circle cx="12" cy="12" r="9"/>
   </symbol>
   <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0z"/>
@@ -466,12 +552,15 @@ function renderCard(venue, dayInt, hour) {
   const score = isVenueOpen ? `<span class="mono" style="color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.05em;">${current}%</span>` : '';
 
   const area = venue.area || 'Nairobi';
+  const cat = venue.category || 'Venue';
+  const catSafe = cat.replace(/[^A-Za-z]/g, '');
 
   return `
-    <article class="card ${closedClass}">
+    <article class="card ${closedClass}" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}">
       <div class="card-head">
-        <svg class="card-icon"><use href="#icon-vibe"/></svg>
+        <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
         <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+        <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
         <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
       </div>
       <div class="card-meta-row">
@@ -541,8 +630,45 @@ if (DATA.generated_at) {
     d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
 }
 
+// ============ Filter chip strip ============
+let activeFilter = 'all';
+
+function renderFilterStrip() {
+  const counts = {};
+  for (const v of DATA.venues) {
+    const a = v.area || 'Nairobi';
+    counts[a] = (counts[a] || 0) + 1;
+  }
+  // Sort areas by venue count desc, then alphabetically
+  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+  const chips = [
+    `<button class="chip ${activeFilter === 'all' ? 'active' : ''}" data-area="all">ALL <span class="chip-count">${DATA.venues.length}</span></button>`,
+    ...sorted.map(([area, n]) =>
+      `<button class="chip ${activeFilter === area ? 'active' : ''}" data-area="${escapeHtml(area)}">${escapeHtml(area).toUpperCase()} <span class="chip-count">${n}</span></button>`
+    ),
+  ];
+  document.getElementById('filter-strip').innerHTML = chips.join('');
+}
+
+function applyFilter() {
+  document.querySelectorAll('.card').forEach(card => {
+    const matches = activeFilter === 'all' || card.dataset.area === activeFilter;
+    card.classList.toggle('hidden', !matches);
+  });
+}
+
+document.getElementById('filter-strip').addEventListener('click', e => {
+  const chip = e.target.closest('.chip');
+  if (!chip) return;
+  activeFilter = chip.dataset.area;
+  renderFilterStrip();
+  applyFilter();
+});
+
+renderFilterStrip();
 render();
-setInterval(render, 60 * 1000);
+applyFilter();
+setInterval(() => { render(); applyFilter(); }, 60 * 1000);
 </script>
 </body>
 </html>
