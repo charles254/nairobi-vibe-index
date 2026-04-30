@@ -194,6 +194,24 @@
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+  .card-area {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    color: var(--cyan);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    opacity: 0.85;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+  }
+  .card-area svg {
+    width: 11px;
+    height: 11px;
+    opacity: 0.9;
+  }
 
   .card-meta-row {
     display: flex;
@@ -378,6 +396,10 @@
     <circle cx="6" cy="18" r="3"/>
     <circle cx="18" cy="16" r="3"/>
   </symbol>
+  <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0z"/>
+    <circle cx="12" cy="10" r="3"/>
+  </symbol>
 </svg>
 
 <script>
@@ -443,11 +465,14 @@ function renderCard(venue, dayInt, hour) {
 
   const score = isVenueOpen ? `<span class="mono" style="color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.05em;">${current}%</span>` : '';
 
+  const area = venue.area || 'Nairobi';
+
   return `
     <article class="card ${closedClass}">
       <div class="card-head">
         <svg class="card-icon"><use href="#icon-vibe"/></svg>
         <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+        <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
       </div>
       <div class="card-meta-row">
         <span class="badge ${badge.cls}">
