@@ -3,8 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>NVI — Nairobi Vibe Index</title>
-<meta name="description" content="Live nightlife intelligence for Nairobi. Foot-traffic forecasts for the city's clubs.">
+<title>NVI — Nairobi Vibe Index · Live Nightlife Dashboard</title>
+<meta name="description" content="Live nightlife intelligence for Nairobi. Foot-traffic forecasts for the city's clubs, bars, and restaurants. The data the city is too drunk to notice.">
+<meta name="theme-color" content="#07080d">
+<meta name="author" content="NVI">
+
+<!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://charles254.github.io/nairobi-vibe-index/">
+<meta property="og:title" content="NVI — Nairobi Vibe Index">
+<meta property="og:description" content="Live nightlife intelligence for Nairobi. Vibe scores for the city's clubs, bars, and restaurants. The data the city is too drunk to notice.">
+<meta property="og:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:site_name" content="NVI">
+
+<!-- Twitter / X -->
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="NVI — Nairobi Vibe Index">
+<meta name="twitter:description" content="Live nightlife intelligence for Nairobi. The data the city is too drunk to notice.">
+<meta name="twitter:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+
+<!-- Favicon: inline SVG, no extra request -->
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%2307080d%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%23ff2d92%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.35em%22%20font-family%3D%22monospace%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ff2d92%22%3ENVI%3C%2Ftext%3E%3C%2Fsvg%3E">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
@@ -198,6 +220,110 @@
     background: rgba(255, 255, 255, 0.15);
   }
 
+  /* ============ Tools bar (search + hide closed) ============ */
+  .tools-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.5rem;
+    align-items: center;
+  }
+  .search-wrap {
+    flex: 1 1 280px;
+    position: relative;
+    min-width: 240px;
+  }
+  .search-wrap svg {
+    position: absolute;
+    left: 0.875rem;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 16px;
+    height: 16px;
+    color: var(--text-faint);
+    pointer-events: none;
+  }
+  .search-input {
+    width: 100%;
+    padding: 0.625rem 1rem 0.625rem 2.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.875rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  .search-input::placeholder { color: var(--text-faint); }
+  .search-input:focus {
+    outline: none;
+    border-color: var(--magenta);
+    box-shadow: 0 0 0 3px rgba(255, 45, 146, 0.15);
+  }
+  .search-clear {
+    position: absolute;
+    right: 0.625rem;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--text-faint);
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    font-size: 1.125rem;
+    line-height: 1;
+    display: none;
+  }
+  .search-input:not(:placeholder-shown) ~ .search-clear { display: block; }
+  .search-clear:hover { color: var(--magenta); }
+
+  .toggle-btn {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.5rem 0.875rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .toggle-btn:hover {
+    border-color: var(--magenta);
+    color: var(--text);
+  }
+  .toggle-btn.active {
+    background: var(--magenta);
+    border-color: var(--magenta);
+    color: white;
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.4);
+  }
+  .toggle-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--text-faint);
+    transition: background 0.15s ease;
+  }
+  .toggle-btn.active .toggle-dot { background: white; }
+
+  .results-count {
+    flex-shrink: 0;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 0 0.5rem;
+  }
+
   /* ============ Card grid ============ */
   .grid {
     display: grid;
@@ -205,6 +331,13 @@
     gap: 1.25rem;
   }
   .card.hidden { display: none; }
+  .grid-empty {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem 1rem;
+    color: var(--text-dim);
+    font-size: 0.875rem;
+  }
   .card {
     position: relative;
     background: var(--bg-card);
@@ -732,8 +865,23 @@
   </section>
 
   <div class="filter-strip" id="filter-strip"></div>
+  <div class="filter-strip" id="cat-strip"></div>
+
+  <div class="tools-bar">
+    <div class="search-wrap">
+      <svg><use href="#icon-search"/></svg>
+      <input type="search" class="search-input" id="search-input" placeholder="Search venues by name..." autocomplete="off">
+      <button class="search-clear" id="search-clear" aria-label="Clear search">×</button>
+    </div>
+    <button class="toggle-btn" id="hide-closed-btn" aria-pressed="false">
+      <span class="toggle-dot"></span>
+      Hide closed
+    </button>
+    <span class="results-count" id="results-count"></span>
+  </div>
 
   <div class="grid" id="grid"></div>
+  <div class="grid-empty" id="grid-empty" hidden>No venues match your filters.</div>
 
   <footer>
     <p><strong>Methodology:</strong> Vibe scores are weekly foot-traffic forecasts (0–100% relative to each venue's own peak) sourced from <a href="https://besttime.app" style="color: var(--cyan)">BestTime.app</a>. The badge for each venue reflects its current intensity for the present Nairobi day-of-week and hour. The chart inside each card is today's full 24-hour curve.</p>
@@ -775,6 +923,10 @@
     <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
     <line x1="12" y1="9" x2="12" y2="13"/>
     <line x1="12" y1="17" x2="12.01" y2="17"/>
+  </symbol>
+  <symbol id="icon-search" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="11" cy="11" r="7"/>
+    <line x1="21" y1="21" x2="16.65" y2="16.65"/>
   </symbol>
 </svg>
 
@@ -846,7 +998,7 @@ function renderCard(venue, dayInt, hour) {
   const catSafe = cat.replace(/[^A-Za-z]/g, '');
 
   return `
-    <article class="card ${closedClass}" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}">
+    <article class="card ${closedClass}" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}" data-name="${escapeHtml(venue.name.toLowerCase())}">
       <div class="card-head">
         <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
         <h3 class="card-name">${escapeHtml(venue.name)}</h3>
@@ -944,46 +1096,91 @@ function renderAlcoblow() {
 
 renderAlcoblow();
 
-// ============ Filter chip strip ============
-let activeFilter = 'all';
+// ============ Filters: area + category + search + hide-closed ============
+const filters = { area: 'all', category: 'all', search: '', hideClosed: false };
 
 function renderFilterStrip() {
-  const counts = {};
+  const areaCounts = {};
+  const catCounts = {};
   for (const v of DATA.venues) {
     const a = v.area || 'Nairobi';
-    counts[a] = (counts[a] || 0) + 1;
+    const c = v.category || 'Venue';
+    areaCounts[a] = (areaCounts[a] || 0) + 1;
+    catCounts[c] = (catCounts[c] || 0) + 1;
   }
-  // Sort by venue count desc, then alphabetically — most useful filters first.
-  const sorted = Object.entries(counts).sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
-  const parts = [
+  const sortByCount = (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]);
+  const areas = Object.entries(areaCounts).sort(sortByCount);
+  const cats = Object.entries(catCounts).sort(sortByCount);
+
+  document.getElementById('filter-strip').innerHTML = [
     `<span class="filter-label">Area:</span>`,
-    `<button class="chip ${activeFilter === 'all' ? 'active' : ''}" data-area="all">All <span class="chip-count">${DATA.venues.length}</span></button>`,
-    ...sorted.map(([area, n]) =>
-      `<button class="chip ${activeFilter === area ? 'active' : ''}" data-area="${escapeHtml(area)}">${escapeHtml(area)} <span class="chip-count">${n}</span></button>`
+    `<button class="chip ${filters.area === 'all' ? 'active' : ''}" data-filter="area" data-value="all">All <span class="chip-count">${DATA.venues.length}</span></button>`,
+    ...areas.map(([a, n]) =>
+      `<button class="chip ${filters.area === a ? 'active' : ''}" data-filter="area" data-value="${escapeHtml(a)}">${escapeHtml(a)} <span class="chip-count">${n}</span></button>`
     ),
-  ];
-  document.getElementById('filter-strip').innerHTML = parts.join('');
+  ].join('');
+
+  document.getElementById('cat-strip').innerHTML = [
+    `<span class="filter-label">Type:</span>`,
+    `<button class="chip ${filters.category === 'all' ? 'active' : ''}" data-filter="category" data-value="all">All <span class="chip-count">${DATA.venues.length}</span></button>`,
+    ...cats.map(([c, n]) =>
+      `<button class="chip ${filters.category === c ? 'active' : ''}" data-filter="category" data-value="${escapeHtml(c)}">${escapeHtml(c)} <span class="chip-count">${n}</span></button>`
+    ),
+  ].join('');
 }
 
-function applyFilter() {
+function applyFilters() {
+  let visible = 0;
+  let total = 0;
   document.querySelectorAll('.card').forEach(card => {
-    const matches = activeFilter === 'all' || card.dataset.area === activeFilter;
-    card.classList.toggle('hidden', !matches);
+    total++;
+    const areaOk   = filters.area === 'all' || card.dataset.area === filters.area;
+    const catOk    = filters.category === 'all' || card.dataset.category === filters.category;
+    const searchOk = !filters.search || (card.dataset.name || '').includes(filters.search);
+    const closedOk = !filters.hideClosed || !card.classList.contains('closed');
+    const ok = areaOk && catOk && searchOk && closedOk;
+    card.classList.toggle('hidden', !ok);
+    if (ok) visible++;
   });
+  document.getElementById('grid-empty').hidden = visible > 0;
+  document.getElementById('results-count').textContent =
+    visible === total ? `${total} venues` : `${visible} of ${total} venues`;
 }
 
-document.getElementById('filter-strip').addEventListener('click', e => {
+function onChipClick(e) {
   const chip = e.target.closest('.chip');
   if (!chip) return;
-  activeFilter = chip.dataset.area;
+  filters[chip.dataset.filter] = chip.dataset.value;
   renderFilterStrip();
-  applyFilter();
+  applyFilters();
+}
+document.getElementById('filter-strip').addEventListener('click', onChipClick);
+document.getElementById('cat-strip').addEventListener('click', onChipClick);
+
+const searchEl = document.getElementById('search-input');
+searchEl.addEventListener('input', () => {
+  filters.search = searchEl.value.trim().toLowerCase();
+  applyFilters();
+});
+document.getElementById('search-clear').addEventListener('click', () => {
+  searchEl.value = '';
+  filters.search = '';
+  applyFilters();
+  searchEl.focus();
+});
+
+const hideClosedBtn = document.getElementById('hide-closed-btn');
+hideClosedBtn.addEventListener('click', () => {
+  filters.hideClosed = !filters.hideClosed;
+  hideClosedBtn.classList.toggle('active', filters.hideClosed);
+  hideClosedBtn.setAttribute('aria-pressed', String(filters.hideClosed));
+  applyFilters();
 });
 
 renderFilterStrip();
 render();
-applyFilter();
-setInterval(() => { render(); applyFilter(); }, 60 * 1000);
+applyFilters();
+setInterval(() => { render(); applyFilters(); }, 60 * 1000);
 </script>
 </body>
 </html>
