@@ -183,7 +183,13 @@
   <p class="lede">The <strong>Nairobi Vibe Index</strong> is a public, research-grade dashboard that scores Nairobi nightlife venues by foot-traffic forecasts. Think of it as <em>"the data the city is too drunk to notice."</em></p>
 
   <h2>What it is</h2>
-  <p>NVI tracks 22 Nairobi clubs, bars, and restaurants across 11 city areas — Westlands, Kilimani, CBD, Lang'ata, Karen, Upper Hill, and more. For each venue, NVI shows:</p>
+  <p>NVI catalogs <strong>127 Nairobi nightlife venues</strong> across 17 city areas — Westlands, Kilimani, Lavington, CBD, Karen, Upper Hill, Hurlingham, Parklands, Kileleshwa, Lang'ata, Ngong Road, Donholm, Eastleigh, Kasarani, Muthaiga, Runda, and South B/C.</p>
+  <p>The catalog is split into two tiers:</p>
+  <ul>
+    <li><strong>22 tracked venues</strong> — full foot-traffic forecasts captured April 2026, with live vibe scores, weekly heatmaps, and "Peaks now" badges.</li>
+    <li><strong>105 listed venues</strong> — known to exist but no forecast data yet. They appear with an <em>Awaiting data</em> badge and a "Report this venue" button that opens a Telegram message you can send with observed busyness. Community reports are how the listed catalog becomes tracked.</li>
+  </ul>
+  <p>For each <em>tracked</em> venue, NVI shows:</p>
   <ul>
     <li><strong>A 0–100% intensity score</strong> for the current Nairobi day-of-week and hour, normalized against that venue's own peak.</li>
     <li><strong>A 24-hour bar chart</strong> of today's typical foot-traffic curve.</li>
@@ -213,12 +219,17 @@
   <h3>What "PEAKS NOW" means</h3>
   <p>A venue is flagged with <code>★ Peaks now</code> when its current hour matches its single highest-intensity hour of the entire week (and that peak is ≥ 60%). It means: <em>"of all the times you could go here, right now is when it's busiest."</em></p>
 
-  <h2>Coverage limits</h2>
+  <h2>Coverage &amp; the listed catalog</h2>
   <div class="callout">
-    <strong>22 of Nairobi's nightlife spots are tracked.</strong> Many iconic venues (B-Club, Kiza Lounge, Alchemist, Mojos) are absent because their public foot-traffic data wasn't sufficient at the time the snapshot was taken. Adding them requires a separate data pipeline — community-contributed reports being a likely path.
+    <strong>22 venues have forecast data; 105 are listed without it.</strong> Iconic spots like B-Club, Kiza Lounge, Alchemist, and Mojos appear in the listed catalog because their public foot-traffic signal wasn't sufficient when the snapshot was taken — they exist in the index, but with no curve.
   </div>
 
-  <p>NVI is <strong>not</strong> a real-time tracker. It's a forecast snapshot — it tells you what each venue's typical pattern looks like for the current day-of-week and hour. The data is intentionally static.</p>
+  <p>NVI is <strong>not</strong> a real-time tracker. It's a forecast snapshot of typical weekly patterns, intentionally static.</p>
+
+  <h3>How the listed catalog graduates</h3>
+  <p>Each listed venue card has a <strong>"Report this venue"</strong> button. Clicking it opens a Telegram share window pre-filled with structured fields (venue name, area, current busyness 0–100%, night of week). When enough reports accumulate for a venue, that venue's heatmap can be hand-built and it graduates from <em>listed</em> to <em>tracked</em>.</p>
+
+  <p>This is a community-data pipeline, not an automated one. It's slow — and that's the point. Every tracked venue carries either real BestTime forecast data or aggregated community reports. No fabricated patterns, no fake heatmaps.</p>
 
   <h2>Alcoblow / safety panel</h2>
   <p>NVI includes a community-aggregated list of common Nairobi alcoblow (police breathalyzer) checkpoint zones. The data is reference intel — police rotate locations and checkpoints can appear anywhere at any time.</p>

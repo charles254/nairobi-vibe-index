@@ -398,6 +398,55 @@
   }
   .card.hidden { display: none; }
 
+  /* Listed-only cards: venues without forecast data, awaiting community reports */
+  .card.listed {
+    background: var(--bg-card);
+    opacity: 0.95;
+  }
+  .card.listed::before { opacity: 0.25; }
+  .card.listed:hover::before { opacity: 0.5; }
+  .listed-body {
+    padding-top: 0.5rem;
+  }
+  .listed-meta {
+    font-size: 0.8125rem;
+    color: var(--text-dim);
+    line-height: 1.5;
+    margin-bottom: 1rem;
+  }
+  .listed-cta {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 0.875rem;
+    background: rgba(0, 214, 255, 0.06);
+    border: 1px solid rgba(0, 214, 255, 0.3);
+    border-radius: 8px;
+    color: var(--cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    text-decoration: none;
+    transition: all 0.15s ease;
+  }
+  .listed-cta:hover {
+    background: rgba(0, 214, 255, 0.12);
+    border-color: var(--cyan);
+    box-shadow: 0 0 10px rgba(0, 214, 255, 0.25);
+  }
+  .listed-cta svg {
+    width: 14px;
+    height: 14px;
+    flex-shrink: 0;
+  }
+  .badge-await {
+    color: var(--text-faint);
+    border-color: var(--border);
+    background: var(--bg);
+  }
+
   /* "PEAKS NOW" — fires when card's current intensity equals its weekly max */
   .card.peaks-now {
     box-shadow: 0 0 0 1px var(--magenta), 0 0 24px rgba(255, 45, 146, 0.25);
@@ -1107,6 +1156,10 @@
   <symbol id="icon-signals" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M2 12h4l3-9 6 18 3-9h4"/>
   </symbol>
+  <symbol id="icon-send" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="22" y1="2" x2="11" y2="13"/>
+    <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+  </symbol>
 </svg>
 
 <script>
@@ -1168,6 +1221,37 @@ function venueWeeklyPeak(venueId) {
     }
   }
   return peak;
+}
+
+function renderListedCard(venue) {
+  const cat = venue.category || 'Venue';
+  const catSafe = cat.replace(/[^A-Za-z]/g, '');
+  const area = venue.area || 'Nairobi';
+  const ratingHtml = venue.rating
+    ? `<span class="card-rating mono"><span class="star">★</span> ${venue.rating.toFixed(1)}</span>`
+    : '';
+  const reportUrl = (DATA.report_url || '#').replace(/Venue%3A%20/, 'Venue%3A%20' + encodeURIComponent(venue.name));
+  return `
+    <article class="card listed" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}" data-name="${escapeHtml(venue.name.toLowerCase())}" data-listed="1">
+      <div class="card-head">
+        <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
+        <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+        <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
+        <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
+      </div>
+      <div class="card-meta-row">
+        <span class="badge badge-await">○ Awaiting data</span>
+        ${ratingHtml}
+      </div>
+      <div class="listed-body">
+        <p class="listed-meta">This venue is in NVI's catalog but no foot-traffic forecast is available yet. Help us index it — submit observed busyness via the report channel.</p>
+        <a class="listed-cta" href="${escapeHtml(reportUrl)}" target="_blank" rel="noopener">
+          <svg><use href="#icon-send"/></svg>
+          Report this venue
+        </a>
+      </div>
+    </article>
+  `;
 }
 
 function renderCard(venue, dayInt, hour) {
@@ -1260,12 +1344,14 @@ function render() {
     hottestEl.dataset.vid = open[0].id;
   }
 
-  // Cards: open venues first (by score desc), then closed
+  // Cards: open venues first (by score desc), then closed, then listed (no data)
   scores.sort((a, b) => {
     const sa = a.score ?? -1, sb = b.score ?? -1;
     return sb - sa;
   });
-  document.getElementById('grid').innerHTML = scores.map(v => renderCard(v, dayInt, hour)).join('');
+  const trackedHtml = scores.map(v => renderCard(v, dayInt, hour)).join('');
+  const listedHtml = (DATA.listed_venues || []).map(renderListedCard).join('');
+  document.getElementById('grid').innerHTML = trackedHtml + listedHtml;
 }
 
 if (DATA.generated_at) {
@@ -1318,7 +1404,8 @@ const filters = { area: 'all', category: 'all', search: '', hideClosed: false };
 function renderFilterStrip() {
   const areaCounts = {};
   const catCounts = {};
-  for (const v of DATA.venues) {
+  const allEntries = [...DATA.venues, ...(DATA.listed_venues || [])];
+  for (const v of allEntries) {
     const a = v.area || 'Nairobi';
     const c = v.category || 'Venue';
     areaCounts[a] = (areaCounts[a] || 0) + 1;
@@ -1327,10 +1414,11 @@ function renderFilterStrip() {
   const sortByCount = (a, b) => b[1] - a[1] || a[0].localeCompare(b[0]);
   const areas = Object.entries(areaCounts).sort(sortByCount);
   const cats = Object.entries(catCounts).sort(sortByCount);
+  const totalCount = allEntries.length;
 
   document.getElementById('filter-strip').innerHTML = [
     `<span class="filter-label">Area:</span>`,
-    `<button class="chip ${filters.area === 'all' ? 'active' : ''}" data-filter="area" data-value="all">All <span class="chip-count">${DATA.venues.length}</span></button>`,
+    `<button class="chip ${filters.area === 'all' ? 'active' : ''}" data-filter="area" data-value="all">All <span class="chip-count">${totalCount}</span></button>`,
     ...areas.map(([a, n]) =>
       `<button class="chip ${filters.area === a ? 'active' : ''}" data-filter="area" data-value="${escapeHtml(a)}">${escapeHtml(a)} <span class="chip-count">${n}</span></button>`
     ),
@@ -1338,7 +1426,7 @@ function renderFilterStrip() {
 
   document.getElementById('cat-strip').innerHTML = [
     `<span class="filter-label">Type:</span>`,
-    `<button class="chip ${filters.category === 'all' ? 'active' : ''}" data-filter="category" data-value="all">All <span class="chip-count">${DATA.venues.length}</span></button>`,
+    `<button class="chip ${filters.category === 'all' ? 'active' : ''}" data-filter="category" data-value="all">All <span class="chip-count">${totalCount}</span></button>`,
     ...cats.map(([c, n]) =>
       `<button class="chip ${filters.category === c ? 'active' : ''}" data-filter="category" data-value="${escapeHtml(c)}">${escapeHtml(c)} <span class="chip-count">${n}</span></button>`
     ),
