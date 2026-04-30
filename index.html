@@ -4,21 +4,21 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>NVI — Nairobi Vibe Index</title>
-<meta name="description" content="Live nightlife intelligence for Nairobi. Track vibe scores across the city's clubs.">
+<meta name="description" content="Live nightlife intelligence for Nairobi. Foot-traffic forecasts for the city's clubs.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #07080d;
     --bg-card: #0e1019;
     --bg-card-hi: #141826;
     --border: #1c2237;
-    --border-hi: #2a3252;
     --text: #e8edf7;
-    --text-dim: #6b7896;
-    --text-faint: #3d4665;
-    --accent: #ff2d92;
+    --text-dim: #8896b8;
+    --text-faint: #4d5878;
+    --magenta: #ff2d92;
+    --cyan: #00d6ff;
     --green: #00d680;
     --yellow: #ffcc00;
     --orange: #ff8c33;
@@ -33,197 +33,271 @@
     min-height: 100vh;
     padding: 2rem 1rem 4rem;
     -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(ellipse at top, rgba(255, 45, 146, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(0, 214, 255, 0.05), transparent 50%),
+      var(--bg);
   }
   .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
-  .container { max-width: 980px; margin: 0 auto; }
+  .container { max-width: 1180px; margin: 0 auto; }
 
-  header { padding-bottom: 2rem; }
+  /* ============ Header ============ */
+  header { padding-bottom: 2.5rem; }
+  .pixel-logo {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(2.5rem, 7vw, 4rem);
+    color: var(--magenta);
+    line-height: 1.1;
+    text-shadow:
+      0 0 20px rgba(255, 45, 146, 0.5),
+      0 0 40px rgba(255, 45, 146, 0.2);
+    letter-spacing: 0.05em;
+  }
+  .pixel-sub {
+    font-family: 'Press Start 2P', monospace;
+    font-size: clamp(0.625rem, 1.5vw, 0.875rem);
+    color: var(--cyan);
+    margin-top: 0.75rem;
+    letter-spacing: 0.1em;
+    text-shadow: 0 0 10px rgba(0, 214, 255, 0.4);
+  }
   .brand-line {
     display: flex;
     align-items: center;
-    gap: 0.75rem;
-    margin-bottom: 0.5rem;
+    gap: 0.625rem;
+    margin-top: 1.5rem;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
   }
   .brand-dot {
     width: 8px;
     height: 8px;
-    background: var(--accent);
+    background: var(--magenta);
     border-radius: 50%;
+    box-shadow: 0 0 8px var(--magenta);
     animation: pulse 2s infinite;
   }
   @keyframes pulse {
     0%, 100% { opacity: 1; }
     50% { opacity: 0.3; }
   }
-  .brand {
-    color: var(--accent);
-    font-size: 0.75rem;
-    letter-spacing: 0.25em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-  h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    letter-spacing: -0.02em;
-    margin-bottom: 0.5rem;
-  }
   .tagline {
     color: var(--text-dim);
     font-size: 0.9375rem;
-  }
-  .timestamp {
-    color: var(--text-faint);
-    font-size: 0.75rem;
     margin-top: 1rem;
-    letter-spacing: 0.05em;
+    max-width: 50ch;
   }
 
-  .gauge {
+  /* ============ Citywide status bar ============ */
+  .status-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0;
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.5rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 3rem 2rem;
-    margin-bottom: 2rem;
-    text-align: center;
+    border-radius: 8px;
     position: relative;
     overflow: hidden;
   }
-  .gauge::before {
+  .status-bar::before {
     content: '';
     position: absolute;
     inset: 0;
-    background: radial-gradient(circle at 50% 0%, rgba(255, 45, 146, 0.08), transparent 60%);
+    background: linear-gradient(90deg, rgba(255, 45, 146, 0.06), transparent 30%, transparent 70%, rgba(0, 214, 255, 0.06));
     pointer-events: none;
   }
-  .gauge-label {
-    color: var(--text-dim);
-    font-size: 0.6875rem;
+  .status-cell {
+    flex: 1 1 auto;
+    min-width: 120px;
+    padding: 0 1rem;
+    border-right: 1px solid var(--border);
+    position: relative;
+    z-index: 1;
+  }
+  .status-cell:last-child { border-right: none; }
+  .status-cell:first-child { padding-left: 0; }
+  .status-cell-label {
+    color: var(--text-faint);
+    font-size: 0.625rem;
     letter-spacing: 0.2em;
     text-transform: uppercase;
+    margin-bottom: 0.25rem;
     font-weight: 600;
   }
-  .gauge-value {
-    font-size: clamp(5rem, 18vw, 8rem);
+  .status-cell-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 1.375rem;
     font-weight: 700;
-    line-height: 1;
-    margin: 0.75rem 0 0.25rem;
-    letter-spacing: -0.04em;
-  }
-  .gauge-unit {
-    color: var(--text-dim);
-    font-size: 1.5rem;
-    margin-left: 0.25rem;
-    font-weight: 500;
-  }
-  .gauge-status {
     color: var(--text);
-    font-size: 0.875rem;
-    font-weight: 500;
-    margin-top: 0.5rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
   }
-  .gauge-context {
-    color: var(--text-dim);
-    font-size: 0.8125rem;
-    margin-top: 0.75rem;
+  .status-cell-value.accent { color: var(--magenta); }
+
+  /* ============ Card grid ============ */
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(360px, 1fr));
+    gap: 1.25rem;
+  }
+  .card {
+    position: relative;
+    background: var(--bg-card);
+    border-radius: 14px;
+    padding: 1.5rem;
+    overflow: hidden;
+    transition: transform 0.2s ease;
+  }
+  .card::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    padding: 1px;
+    background: linear-gradient(135deg, var(--magenta), var(--cyan));
+    -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+    -webkit-mask-composite: xor;
+            mask-composite: exclude;
+    opacity: 0.6;
+    transition: opacity 0.2s ease;
+    pointer-events: none;
+  }
+  .card:hover { transform: translateY(-2px); }
+  .card:hover::before { opacity: 1; }
+  .card.closed { opacity: 0.55; }
+  .card.closed::before { opacity: 0.3; }
+
+  .card-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .card-icon {
+    width: 24px;
+    height: 24px;
+    flex-shrink: 0;
+    color: var(--magenta);
+    filter: drop-shadow(0 0 6px rgba(255, 45, 146, 0.4));
+  }
+  .card-name {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.9375rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--text);
+    flex: 1;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
   }
 
-  .leaderboard {
-    background: var(--bg-card);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    overflow: hidden;
-    margin-bottom: 2rem;
-  }
-  .lb-header {
-    padding: 1rem 1.5rem;
-    border-bottom: 1px solid var(--border);
+  .card-meta-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    background: var(--bg-card-hi);
-  }
-  .lb-title {
-    font-size: 0.6875rem;
-    color: var(--text-dim);
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    font-weight: 600;
-  }
-  .lb-count { color: var(--text-faint); }
-
-  .venue-row {
-    padding: 1rem 1.5rem;
+    margin-bottom: 1.25rem;
+    padding-bottom: 1rem;
     border-bottom: 1px solid var(--border);
-    display: grid;
-    grid-template-columns: 28px 1fr 4rem 200px;
-    gap: 1rem;
+  }
+  .badge {
+    display: inline-flex;
     align-items: center;
-    transition: background 0.15s;
-  }
-  .venue-row:last-child { border-bottom: none; }
-  .venue-row:hover { background: var(--bg-card-hi); }
-  .venue-rank {
-    color: var(--text-faint);
-    font-size: 0.8125rem;
-    font-weight: 600;
-    text-align: center;
-  }
-  .venue-name {
-    font-weight: 500;
-    font-size: 0.9375rem;
-  }
-  .venue-name-meta {
-    color: var(--text-faint);
-    font-size: 0.75rem;
-    margin-left: 0.5rem;
-  }
-  .venue-score {
+    gap: 0.375rem;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
     font-weight: 700;
-    font-size: 1.0625rem;
-    text-align: right;
-  }
-  .venue-bar {
-    height: 6px;
-    background: var(--border);
-    border-radius: 3px;
-    overflow: hidden;
-  }
-  .venue-bar-fill {
-    height: 100%;
-    border-radius: 3px;
-    transition: width 0.4s ease, background 0.4s ease;
-  }
-
-  .closed-strip {
-    color: var(--text-faint);
-    font-size: 0.75rem;
-    padding: 1rem 1.5rem;
-    border-top: 1px solid var(--border);
-    background: var(--bg-card-hi);
-  }
-  .closed-strip-label {
-    color: var(--text-dim);
+    letter-spacing: 0.08em;
     text-transform: uppercase;
+    padding: 0.5rem 0.875rem;
+    border-radius: 6px;
+    border: 1px solid;
+  }
+  .badge-peak     { color: var(--red);     border-color: var(--red);     background: rgba(255, 51, 85, 0.1);  box-shadow: 0 0 12px rgba(255, 51, 85, 0.25); }
+  .badge-high     { color: var(--orange);  border-color: var(--orange);  background: rgba(255, 140, 51, 0.1); box-shadow: 0 0 12px rgba(255, 140, 51, 0.2); }
+  .badge-mod      { color: var(--yellow);  border-color: var(--yellow);  background: rgba(255, 204, 0, 0.08); }
+  .badge-build    { color: var(--green);   border-color: var(--green);   background: rgba(0, 214, 128, 0.08); }
+  .badge-low      { color: var(--cyan);    border-color: var(--cyan);    background: rgba(0, 214, 255, 0.08); box-shadow: 0 0 12px rgba(0, 214, 255, 0.2); }
+  .badge-closed   { color: var(--text-faint); border-color: var(--border); background: transparent; }
+  .badge-arrow    { font-weight: 900; }
+
+  .card-rating {
+    color: var(--text-dim);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .card-rating .star { color: var(--yellow); }
+
+  /* ============ Bar chart ============ */
+  .chart-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 700;
+    color: var(--text-dim);
     letter-spacing: 0.15em;
-    font-weight: 600;
-    margin-right: 0.75rem;
+    text-transform: uppercase;
+    margin-bottom: 0.875rem;
+  }
+  .chart {
+    display: flex;
+    align-items: flex-end;
+    gap: 3px;
+    height: 96px;
+    margin-bottom: 0.5rem;
+  }
+  .bar {
+    flex: 1;
+    border-radius: 2px 2px 0 0;
+    background: var(--cyan);
+    min-height: 4px;
+    transition: background 0.2s ease;
+    position: relative;
+  }
+  .bar.bar-closed {
+    background: var(--border);
+    height: 4px !important;
+    align-self: flex-end;
+  }
+  .bar.bar-now {
+    box-shadow: 0 0 12px currentColor;
+  }
+  .bar.bar-now::after {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 4px solid transparent;
+    border-right: 4px solid transparent;
+    border-top: 5px solid var(--magenta);
+    filter: drop-shadow(0 0 4px var(--magenta));
   }
 
+  .chart-axis {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-faint);
+    letter-spacing: 0.05em;
+    padding-top: 0.25rem;
+  }
+
+  /* ============ Empty / closed state ============ */
   .empty-state {
-    padding: 3rem 1.5rem;
+    grid-column: 1 / -1;
     text-align: center;
+    padding: 3rem 1rem;
     color: var(--text-dim);
   }
-  .empty-state-title {
-    font-size: 1.25rem;
-    color: var(--text);
-    margin-bottom: 0.5rem;
-    font-weight: 600;
-  }
 
+  /* ============ Footer ============ */
   footer {
     margin-top: 3rem;
     padding-top: 2rem;
@@ -233,11 +307,10 @@
     line-height: 1.7;
   }
   footer p { margin-bottom: 0.5rem; }
-  footer a { color: var(--text-dim); text-decoration: underline; text-underline-offset: 2px; }
-  footer a:hover { color: var(--accent); }
+  footer strong { color: var(--text-dim); }
   .disclaimer {
     margin-top: 1.5rem;
-    padding: 1rem;
+    padding: 1rem 1.25rem;
     background: var(--bg-card);
     border: 1px solid var(--border);
     border-radius: 8px;
@@ -245,90 +318,87 @@
   }
 
   @media (max-width: 600px) {
-    body { padding: 1rem 0.75rem 3rem; }
-    .gauge { padding: 2.5rem 1.25rem; }
-    .venue-row {
-      grid-template-columns: 24px 1fr auto;
-      gap: 0.5rem 0.75rem;
-      padding: 0.875rem 1rem;
-    }
-    .venue-bar { grid-column: 1 / -1; margin-top: 0.25rem; }
-    .lb-header { padding: 0.875rem 1rem; }
-    .closed-strip { padding: 0.875rem 1rem; }
-    h1 { font-size: 1.375rem; }
+    body { padding: 1.25rem 0.75rem 3rem; }
+    .grid { grid-template-columns: 1fr; gap: 1rem; }
+    .card { padding: 1.25rem; }
+    .status-bar { padding: 1rem; }
+    .status-cell { padding: 0 0.625rem; min-width: 90px; }
+    .status-cell-value { font-size: 1.125rem; }
+    .pixel-sub { margin-top: 0.5rem; }
   }
 </style>
 </head>
 <body>
 <div class="container">
   <header>
+    <h1 class="pixel-logo">NVI</h1>
+    <p class="pixel-sub">NAIROBI&nbsp;VIBE&nbsp;INDEX</p>
+    <p class="tagline">The data the city is too drunk to notice. Live nightlife intelligence — foot-traffic forecasts for Nairobi's clubs.</p>
     <div class="brand-line">
       <div class="brand-dot"></div>
-      <div class="brand mono">NVI · NAIROBI VIBE INDEX</div>
+      <span class="mono" id="timestamp">--</span>
     </div>
-    <h1>The data the city is too drunk to notice.</h1>
-    <p class="tagline">Live nightlife intelligence. Updated every minute, refreshed weekly from foot traffic data.</p>
-    <div class="timestamp mono" id="timestamp">--</div>
   </header>
 
-  <div class="gauge">
-    <div class="gauge-label mono">Citywide vibe — right now</div>
-    <div>
-      <span class="gauge-value mono" id="gauge-value">--</span><span class="gauge-unit mono">%</span>
+  <div class="status-bar">
+    <div class="status-cell">
+      <div class="status-cell-label">Citywide NVI</div>
+      <div class="status-cell-value accent mono" id="citywide">--</div>
     </div>
-    <div class="gauge-status mono" id="gauge-status">--</div>
-    <div class="gauge-context" id="gauge-context"></div>
+    <div class="status-cell">
+      <div class="status-cell-label">Status</div>
+      <div class="status-cell-value mono" id="citywide-status">--</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-cell-label">Open</div>
+      <div class="status-cell-value mono" id="open-count">--</div>
+    </div>
+    <div class="status-cell">
+      <div class="status-cell-label">Hottest</div>
+      <div class="status-cell-value mono" id="hottest" style="font-size: 0.9375rem;">--</div>
+    </div>
   </div>
 
-  <div class="leaderboard">
-    <div class="lb-header">
-      <div class="lb-title mono">Live leaderboard</div>
-      <div class="lb-title mono lb-count" id="lb-count">--</div>
-    </div>
-    <div id="venues"></div>
-    <div class="closed-strip mono" id="closed-strip" hidden></div>
-  </div>
+  <div class="grid" id="grid"></div>
 
   <footer>
-    <p><strong style="color: var(--text-dim);">Methodology:</strong> Vibe scores are weekly foot-traffic forecasts (0–100% relative to each venue's own peak hour) sourced from <a href="https://besttime.app">BestTime.app</a>. Citywide NVI is the average of all open venues at the current Nairobi day-of-week and hour.</p>
-    <p><strong style="color: var(--text-dim);">Coverage:</strong> Nairobi nightclubs with sufficient public foot-traffic data. Many iconic spots aren't yet indexed — we're working on it.</p>
-    <p><strong style="color: var(--text-dim);">Last data refresh:</strong> <span class="mono" id="generated-at">--</span></p>
+    <p><strong>Methodology:</strong> Vibe scores are weekly foot-traffic forecasts (0–100% relative to each venue's own peak) sourced from <a href="https://besttime.app" style="color: var(--cyan)">BestTime.app</a>. The badge for each venue reflects its current intensity for the present Nairobi day-of-week and hour. The chart inside each card is today's full 24-hour curve.</p>
+    <p><strong>Coverage:</strong> Limited to Nairobi venues with sufficient public foot-traffic data. Many iconic spots aren't yet indexed — working on it.</p>
+    <p><strong>Last data refresh:</strong> <span class="mono" id="generated-at">--</span></p>
     <div class="disclaimer">
       NVI is a research/entertainment project. Scores are statistical estimates from public data — not real-time, not predictions. Do not make critical decisions based on NVI.
     </div>
   </footer>
 </div>
 
-<script>
-const DATA = {"venues": [{"id": "ven_5962316b346162796f72415267784c583854767a5753464a496843", "name": "40Forty Lounge", "lat": -1.2674208999999999, "lon": 36.8083659, "rating": 4.2}, {"id": "ven_512d46506c642d43764a305267784c526b2d474b7065584a496843", "name": "BLACK STARS Club & Lounge", "lat": -1.2925769, "lon": 36.7860843, "rating": 4.2}, {"id": "ven_4d396f574f507a764b44315267784c584d69454274546b4a496843", "name": "Havana Bar & Restaurant", "lat": -1.2642143, "lon": 36.8044386, "rating": 4.3}, {"id": "ven_63376e344f5977327372435267784c58774467487877744a496843", "name": "K1 Klub House", "lat": -1.2682335, "lon": 36.8119787, "rating": 4.3}, {"id": "ven_386f4c666b4943754968395267784c4e386f61436b59584a496843", "name": "The Tunnel", "lat": -1.3537141, "lon": 36.905667099999995, "rating": 4.4}, {"id": "ven_3476426f494a4d7a775a545267784c523078614845536f4a496843", "name": "XS Millionaires Club", "lat": -1.3005322, "lon": 36.8255141, "rating": 4.2}], "heatmaps": {"ven_5962316b346162796f72415267784c583854767a5753464a496843": [[10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 55, 75, 85, 85, 80, 80, 75, 60, 45, 35, 30, 20, 20], [20, 15, 15, 10, 5, 5, 0, 0, 0, 0, 0, 60, 80, 95, 100, 100, 90, 90, 75, 60, 50, 40, 30, 25], [15, 15, 10, 5, 5, 5, 0, 0, 0, 0, 0, 60, 80, 95, 95, 90, 85, 85, 70, 50, 35, 25, 25, 25], [20, 15, 10, 5, 10, 10, 0, 0, 0, 0, 0, 55, 80, 90, 90, 80, 75, 70, 60, 45, 40, 35, 30, 30], [25, 15, 10, 10, 5, 5, 0, 0, 0, 0, 0, 60, 80, 90, 95, 90, 85, 80, 65, 60, 55, 55, 50, 40], [25, 15, 10, 5, 5, 5, 0, 0, 0, 0, 0, 50, 60, 70, 70, 75, 75, 80, 90, 95, 85, 60, 45, 35], [15, 15, 10, 5, 10, 10, 0, 0, 0, 0, 0, 30, 35, 40, 35, 30, 30, 35, 35, 40, 30, 25, 20, 20]], "ven_512d46506c642d43764a305267784c526b2d474b7065584a496843": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [25, 20, 15, 10, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 50, 45, 40, 35], [40, 30, 25, 20, 30, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 55, 60, 65, 60], [70, 65, 55, 50, 55, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 55, 65, 80, 85], [75, 60, 55, 55, 40, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 45, 55, 70, 85, 95], [75, 60, 50, 50, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 35, 40, 50, 70, 90, 100], [50, 35, 30, 30, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 25, 30, 35, 50, 55, 60]], "ven_4d396f574f507a764b44315267784c584d69454274546b4a496843": [[10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 25, 45, 70, 85, 75, 55, 35, 25, 20, 15], [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 75, 95, 90, 65, 40, 25, 20, 20], [20, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 80, 100, 95, 70, 45, 30, 25, 25], [20, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 75, 90, 85, 65, 45, 35, 30, 25], [40, 35, 25, 20, 20, 0, 0, 0, 0, 0, 0, 0, 10, 15, 25, 45, 65, 75, 70, 60, 50, 45, 50, 50], [50, 40, 30, 25, 10, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 15, 15, 15, 20, 25, 30, 40, 50, 60], [15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, 10, 10, 15, 15, 20, 25, 25, 25]], "ven_63376e344f5977327372435267784c58774467487877744a496843": [[10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 15, 20, 20, 25, 20, 20, 15, 10], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 10, 10, 10, 5], [10, 10, 5, 5, 15, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 15, 10, 10, 10], [80, 65, 45, 30, 10, 10, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 20, 25, 30, 45, 70, 90, 100], [20, 10, 10, 10, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 10, 15, 15, 15, 20, 25, 25, 30, 30, 25], [20, 15, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 20, 20, 25, 30, 30, 30, 30], [25, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 20, 30, 35, 40, 45, 45, 35]], "ven_386f4c666b4943754968395267784c4e386f61436b59584a496843": [[10, 10, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 20, 20, 15], [15, 10, 10, 5, 10, 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 15, 15, 20, 20, 20, 20, 25, 20], [30, 25, 20, 15, 10, 10, 5, 5, 5, 10, 10, 10, 10, 10, 15, 15, 15, 20, 20, 25, 30, 35, 40, 40], [25, 20, 15, 10, 15, 10, 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 20, 20, 20, 25, 30, 35, 35], [70, 55, 40, 30, 25, 20, 5, 5, 5, 5, 10, 10, 10, 10, 10, 15, 15, 20, 25, 25, 40, 60, 75, 85], [80, 65, 50, 40, 20, 20, 10, 10, 10, 5, 10, 10, 10, 10, 10, 10, 10, 15, 20, 25, 40, 65, 90, 100], [30, 20, 20, 20, 5, 5, 15, 10, 10, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 25, 30, 40, 40, 40]], "ven_3476426f494a4d7a775a545267784c523078614845536f4a496843": [[10, 10, 10, 10, 5, 10, 10, 15, 30, 40, 50, 50, 55, 55, 65, 70, 60, 55, 45, 35, 30, 20, 15, 10], [5, 5, 5, 5, 15, 10, 10, 20, 35, 45, 50, 55, 60, 60, 60, 60, 55, 55, 50, 40, 25, 15, 10, 5], [50, 40, 30, 25, 25, 20, 10, 15, 25, 40, 45, 50, 55, 60, 65, 65, 60, 55, 50, 50, 45, 50, 60, 65], [60, 50, 40, 35, 40, 25, 15, 15, 20, 30, 40, 50, 55, 65, 70, 65, 60, 55, 50, 50, 50, 55, 70, 75], [85, 75, 65, 55, 45, 35, 20, 15, 20, 30, 40, 45, 50, 55, 60, 65, 60, 45, 40, 45, 55, 70, 85, 100], [80, 70, 60, 55, 35, 30, 30, 25, 30, 40, 50, 55, 60, 60, 55, 50, 40, 35, 30, 30, 40, 60, 80, 100], [10, 10, 10, 20, 5, 5, 25, 20, 15, 20, 25, 30, 25, 25, 25, 25, 25, 25, 20, 15, 10, 10, 10, 10]]}, "generated_at": "2026-04-30T12:23:03.032286+00:00"};
+<!-- SVG icon used for each card head -->
+<svg width="0" height="0" style="position:absolute">
+  <symbol id="icon-vibe" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M9 18V5l12-2v13"/>
+    <circle cx="6" cy="18" r="3"/>
+    <circle cx="18" cy="16" r="3"/>
+  </symbol>
+</svg>
 
+<script>
+const DATA = {"venues": [{"id": "ven_5962316b346162796f72415267784c583854767a5753464a496843", "name": "40Forty Lounge", "lat": -1.2674208999999999, "lon": 36.8083659, "rating": 4.2}, {"id": "ven_512d46506c642d43764a305267784c526b2d474b7065584a496843", "name": "BLACK STARS Club & Lounge", "lat": -1.2925769, "lon": 36.7860843, "rating": 4.2}, {"id": "ven_4d396f574f507a764b44315267784c584d69454274546b4a496843", "name": "Havana Bar & Restaurant", "lat": -1.2642143, "lon": 36.8044386, "rating": 4.3}, {"id": "ven_63376e344f5977327372435267784c58774467487877744a496843", "name": "K1 Klub House", "lat": -1.2682335, "lon": 36.8119787, "rating": 4.3}, {"id": "ven_386f4c666b4943754968395267784c4e386f61436b59584a496843", "name": "The Tunnel", "lat": -1.3537141, "lon": 36.905667099999995, "rating": 4.4}, {"id": "ven_3476426f494a4d7a775a545267784c523078614845536f4a496843", "name": "XS Millionaires Club", "lat": -1.3005322, "lon": 36.8255141, "rating": 4.2}], "heatmaps": {"ven_5962316b346162796f72415267784c583854767a5753464a496843": [[10, 10, 10, 10, 10, 10, 0, 0, 0, 0, 0, 55, 75, 85, 85, 80, 80, 75, 60, 45, 35, 30, 20, 20], [20, 15, 15, 10, 5, 5, 0, 0, 0, 0, 0, 60, 80, 95, 100, 100, 90, 90, 75, 60, 50, 40, 30, 25], [15, 15, 10, 5, 5, 5, 0, 0, 0, 0, 0, 60, 80, 95, 95, 90, 85, 85, 70, 50, 35, 25, 25, 25], [20, 15, 10, 5, 10, 10, 0, 0, 0, 0, 0, 55, 80, 90, 90, 80, 75, 70, 60, 45, 40, 35, 30, 30], [25, 15, 10, 10, 5, 5, 0, 0, 0, 0, 0, 60, 80, 90, 95, 90, 85, 80, 65, 60, 55, 55, 50, 40], [25, 15, 10, 5, 5, 5, 0, 0, 0, 0, 0, 50, 60, 70, 70, 75, 75, 80, 90, 95, 85, 60, 45, 35], [15, 15, 10, 5, 10, 10, 0, 0, 0, 0, 0, 30, 35, 40, 35, 30, 30, 35, 35, 40, 30, 25, 20, 20]], "ven_512d46506c642d43764a305267784c526b2d474b7065584a496843": [[0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0], [25, 20, 15, 10, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 50, 45, 40, 35], [40, 30, 25, 20, 30, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 55, 60, 65, 60], [70, 65, 55, 50, 55, 45, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 35, 45, 55, 65, 80, 85], [75, 60, 55, 55, 40, 25, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 30, 45, 55, 70, 85, 95], [75, 60, 50, 50, 30, 20, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 35, 40, 50, 70, 90, 100], [50, 35, 30, 30, 15, 15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 20, 25, 30, 35, 50, 55, 60]], "ven_4d396f574f507a764b44315267784c584d69454274546b4a496843": [[10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 25, 45, 70, 85, 75, 55, 35, 25, 20, 15], [10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 75, 95, 90, 65, 40, 25, 20, 20], [20, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 80, 100, 95, 70, 45, 30, 25, 25], [20, 15, 10, 0, 0, 0, 0, 0, 0, 0, 0, 0, 10, 15, 30, 50, 75, 90, 85, 65, 45, 35, 30, 25], [40, 35, 25, 20, 20, 0, 0, 0, 0, 0, 0, 0, 10, 15, 25, 45, 65, 75, 70, 60, 50, 45, 50, 50], [50, 40, 30, 25, 10, 0, 0, 0, 0, 0, 0, 0, 10, 10, 10, 15, 15, 15, 20, 25, 30, 40, 50, 60], [15, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 5, 10, 10, 10, 10, 15, 15, 20, 25, 25, 25]], "ven_63376e344f5977327372435267784c58774467487877744a496843": [[10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 15, 20, 20, 25, 20, 20, 15, 10], [5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 10, 10, 10, 5], [10, 10, 5, 5, 15, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 15, 10, 10, 10], [80, 65, 45, 30, 10, 10, 5, 5, 5, 5, 10, 10, 10, 15, 15, 15, 15, 20, 25, 30, 45, 70, 90, 100], [20, 10, 10, 10, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 10, 15, 15, 15, 20, 25, 25, 30, 30, 25], [20, 15, 10, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 20, 20, 25, 30, 30, 30, 30], [25, 15, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 5, 10, 10, 10, 15, 20, 30, 35, 40, 45, 45, 35]], "ven_386f4c666b4943754968395267784c4e386f61436b59584a496843": [[10, 10, 5, 5, 5, 5, 5, 5, 10, 10, 10, 10, 10, 10, 15, 15, 15, 15, 15, 15, 15, 20, 20, 15], [15, 10, 10, 5, 10, 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 15, 15, 20, 20, 20, 20, 25, 20], [30, 25, 20, 15, 10, 10, 5, 5, 5, 10, 10, 10, 10, 10, 15, 15, 15, 20, 20, 25, 30, 35, 40, 40], [25, 20, 15, 10, 15, 10, 5, 5, 5, 5, 10, 10, 10, 10, 15, 15, 15, 20, 20, 20, 25, 30, 35, 35], [70, 55, 40, 30, 25, 20, 5, 5, 5, 5, 10, 10, 10, 10, 10, 15, 15, 20, 25, 25, 40, 60, 75, 85], [80, 65, 50, 40, 20, 20, 10, 10, 10, 5, 10, 10, 10, 10, 10, 10, 10, 15, 20, 25, 40, 65, 90, 100], [30, 20, 20, 20, 5, 5, 15, 10, 10, 5, 5, 5, 5, 5, 10, 10, 10, 15, 15, 25, 30, 40, 40, 40]], "ven_3476426f494a4d7a775a545267784c523078614845536f4a496843": [[10, 10, 10, 10, 5, 10, 10, 15, 30, 40, 50, 50, 55, 55, 65, 70, 60, 55, 45, 35, 30, 20, 15, 10], [5, 5, 5, 5, 15, 10, 10, 20, 35, 45, 50, 55, 60, 60, 60, 60, 55, 55, 50, 40, 25, 15, 10, 5], [50, 40, 30, 25, 25, 20, 10, 15, 25, 40, 45, 50, 55, 60, 65, 65, 60, 55, 50, 50, 45, 50, 60, 65], [60, 50, 40, 35, 40, 25, 15, 15, 20, 30, 40, 50, 55, 65, 70, 65, 60, 55, 50, 50, 50, 55, 70, 75], [85, 75, 65, 55, 45, 35, 20, 15, 20, 30, 40, 45, 50, 55, 60, 65, 60, 45, 40, 45, 55, 70, 85, 100], [80, 70, 60, 55, 35, 30, 30, 25, 30, 40, 50, 55, 60, 60, 55, 50, 40, 35, 30, 30, 40, 60, 80, 100], [10, 10, 10, 20, 5, 5, 25, 20, 15, 20, 25, 30, 25, 25, 25, 25, 25, 25, 20, 15, 10, 10, 10, 10]]}, "generated_at": "2026-04-30T12:53:50.767476+00:00"};
+const DAYS = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 const DAYS_FULL = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
-const DAYS_SHORT = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
 
 function nairobiNow() {
-  // EAT is UTC+3, no DST
   const utc = new Date();
   const eat = new Date(utc.getTime() + 3 * 3600 * 1000);
-  // BestTime/our schema: Mon=0..Sun=6. JS getUTCDay: Sun=0..Sat=6
   const dayInt = (eat.getUTCDay() + 6) % 7;
-  const hour = eat.getUTCHours();
-  const minute = eat.getUTCMinutes();
-  return { dayInt, hour, minute };
+  return { dayInt, hour: eat.getUTCHours(), minute: eat.getUTCMinutes() };
 }
 
-function statusFor(score) {
-  if (score >= 80) return ['PEAK', 'var(--red)'];
-  if (score >= 60) return ['HIGH', 'var(--orange)'];
-  if (score >= 40) return ['MODERATE', 'var(--yellow)'];
-  if (score >= 20) return ['BUILDING', 'var(--green)'];
-  return ['QUIET', 'var(--text-dim)'];
-}
-
-function barColor(score) {
-  if (score >= 80) return 'var(--red)';
-  if (score >= 60) return 'var(--orange)';
-  if (score >= 40) return 'var(--yellow)';
-  return 'var(--green)';
+function classify(score) {
+  if (score >= 80) return { cls: 'badge-peak',   text: 'PEAK',   arrow: '▲' };
+  if (score >= 60) return { cls: 'badge-high',   text: 'HIGH',   arrow: '▲' };
+  if (score >= 40) return { cls: 'badge-mod',    text: 'MOD',    arrow: '▶' };
+  if (score >= 20) return { cls: 'badge-build',  text: 'BUILDING', arrow: '▲' };
+  if (score >  0)  return { cls: 'badge-low',    text: 'LOW',    arrow: '▽' };
+  return                  { cls: 'badge-low',    text: 'LOW',    arrow: '▽' };
 }
 
 function escapeHtml(s) {
@@ -337,71 +407,109 @@ function escapeHtml(s) {
   }[c]));
 }
 
+function isOpen(intensity) {
+  return intensity != null && intensity >= 0 && intensity <= 100;
+}
+
+function renderChart(dayHours, currentHour) {
+  // Render 24 bars (hours 0..23) as flex children.
+  // Closed hours rendered as tiny flat bars.
+  const peak = Math.max(0, ...dayHours.filter(isOpen));
+  return dayHours.map((v, h) => {
+    if (!isOpen(v)) {
+      return `<div class="bar bar-closed" title="Closed at ${h}:00"></div>`;
+    }
+    const heightPct = peak === 0 ? 0 : Math.max(8, (v / 100) * 100);
+    const color = v >= 80 ? 'var(--red)'
+                : v >= 60 ? 'var(--orange)'
+                : v >= 40 ? 'var(--yellow)'
+                :          'var(--cyan)';
+    const isNow = (h === currentHour);
+    return `<div class="bar${isNow ? ' bar-now' : ''}" style="height: ${heightPct}%; background: ${color}; color: ${color}" title="${h}:00 — ${v}%"></div>`;
+  }).join('');
+}
+
+function renderCard(venue, dayInt, hour) {
+  const dayHours = (DATA.heatmaps[venue.id] || [])[dayInt] || new Array(24).fill(null);
+  const current = dayHours[hour];
+  const isVenueOpen = isOpen(current);
+
+  const badge = isVenueOpen ? classify(current) : { cls: 'badge-closed', text: 'CLOSED', arrow: '' };
+  const closedClass = isVenueOpen ? '' : 'closed';
+
+  const ratingHtml = venue.rating
+    ? `<span class="card-rating mono"><span class="star">★</span> ${venue.rating.toFixed(1)}</span>`
+    : '';
+
+  const score = isVenueOpen ? `<span class="mono" style="color: var(--text-dim); font-size: 0.75rem; letter-spacing: 0.05em;">${current}%</span>` : '';
+
+  return `
+    <article class="card ${closedClass}">
+      <div class="card-head">
+        <svg class="card-icon"><use href="#icon-vibe"/></svg>
+        <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+      </div>
+      <div class="card-meta-row">
+        <span class="badge ${badge.cls}">
+          ${badge.arrow ? `<span class="badge-arrow">${badge.arrow}</span>` : ''}
+          ${badge.text}${isVenueOpen && badge.text !== 'CLOSED' ? ' FLOOR' : ''}
+        </span>
+        <span style="display: flex; gap: 0.875rem; align-items: center;">
+          ${score}
+          ${ratingHtml}
+        </span>
+      </div>
+      <div class="chart-title">Popular times — ${DAYS_FULL[dayInt]}</div>
+      <div class="chart">${renderChart(dayHours, hour)}</div>
+      <div class="chart-axis">
+        <span>12a</span><span>6a</span><span>12p</span><span>6p</span><span>12a</span>
+      </div>
+    </article>
+  `;
+}
+
 function render() {
   const { dayInt, hour, minute } = nairobiNow();
 
   document.getElementById('timestamp').textContent =
-    `${DAYS_FULL[dayInt].toUpperCase()} · ${String(hour).padStart(2, '0')}:${String(minute).padStart(2, '0')} EAT · NAIROBI`;
+    `${DAYS_FULL[dayInt].toUpperCase()} · ${String(hour).padStart(2,'0')}:${String(minute).padStart(2,'0')} EAT · NAIROBI`;
 
+  // Citywide computation
   const scores = DATA.venues.map(v => {
     const intensity = (DATA.heatmaps[v.id] || [])[dayInt]?.[hour];
-    const valid = intensity != null && intensity >= 0 && intensity <= 100;
-    return { ...v, score: valid ? intensity : null };
+    return { ...v, score: isOpen(intensity) ? intensity : null };
   });
-
   const open = scores.filter(s => s.score !== null).sort((a, b) => b.score - a.score);
-  const closed = scores.filter(s => s.score === null);
-
-  const gaugeValue = document.getElementById('gauge-value');
-  const gaugeStatus = document.getElementById('gauge-status');
-  const gaugeContext = document.getElementById('gauge-context');
-  const venuesDiv = document.getElementById('venues');
-  const lbCount = document.getElementById('lb-count');
-  const closedStrip = document.getElementById('closed-strip');
 
   if (open.length === 0) {
-    gaugeValue.textContent = '0';
-    gaugeStatus.textContent = 'ASLEEP';
-    gaugeStatus.style.color = 'var(--text-dim)';
-    gaugeContext.textContent = `All ${DATA.venues.length} venues closed at this hour. Most Nairobi clubs open 8 PM – 3 AM.`;
-    venuesDiv.innerHTML = `<div class="empty-state"><div class="empty-state-title">Nightlife is asleep</div><div>Check back after sundown. Peak vibes typically 10 PM – 1 AM.</div></div>`;
-    lbCount.textContent = `0/${scores.length} OPEN`;
-    closedStrip.hidden = true;
-    return;
-  }
-
-  const avg = open.reduce((s, v) => s + v.score, 0) / open.length;
-  const [statusText, statusColor] = statusFor(avg);
-
-  gaugeValue.textContent = Math.round(avg);
-  gaugeStatus.textContent = statusText;
-  gaugeStatus.style.color = statusColor;
-  gaugeContext.textContent = open.length === 1
-    ? `${open[0].name} is the only venue currently open.`
-    : `${open[0].name} leading at ${open[0].score}%.`;
-
-  venuesDiv.innerHTML = open.map((v, i) => `
-    <div class="venue-row">
-      <div class="venue-rank mono">${i + 1}</div>
-      <div class="venue-name">
-        ${escapeHtml(v.name)}${v.rating ? `<span class="venue-name-meta mono">★ ${v.rating}</span>` : ''}
-      </div>
-      <div class="venue-score mono" style="color: ${barColor(v.score)}">${v.score}%</div>
-      <div class="venue-bar"><div class="venue-bar-fill" style="width: ${v.score}%; background: ${barColor(v.score)}"></div></div>
-    </div>
-  `).join('');
-
-  lbCount.textContent = `${open.length}/${scores.length} OPEN`;
-
-  if (closed.length > 0) {
-    closedStrip.innerHTML = `<span class="closed-strip-label">CLOSED</span>${closed.map(c => escapeHtml(c.name)).join(' · ')}`;
-    closedStrip.hidden = false;
+    document.getElementById('citywide').textContent = '0%';
+    document.getElementById('citywide-status').textContent = 'ASLEEP';
+    document.getElementById('citywide-status').style.color = 'var(--text-dim)';
+    document.getElementById('open-count').textContent = `0/${scores.length}`;
+    document.getElementById('hottest').textContent = '—';
   } else {
-    closedStrip.hidden = true;
+    const avg = Math.round(open.reduce((s, v) => s + v.score, 0) / open.length);
+    const cls = classify(avg);
+    document.getElementById('citywide').textContent = `${avg}%`;
+    document.getElementById('citywide-status').textContent = cls.text;
+    document.getElementById('citywide-status').style.color =
+      avg >= 80 ? 'var(--red)' :
+      avg >= 60 ? 'var(--orange)' :
+      avg >= 40 ? 'var(--yellow)' :
+      avg >= 20 ? 'var(--green)' :
+                  'var(--cyan)';
+    document.getElementById('open-count').textContent = `${open.length}/${scores.length}`;
+    document.getElementById('hottest').textContent = open[0].name.length > 18 ? open[0].name.slice(0, 16) + '…' : open[0].name;
   }
+
+  // Cards: open venues first (by score desc), then closed
+  scores.sort((a, b) => {
+    const sa = a.score ?? -1, sb = b.score ?? -1;
+    return sb - sa;
+  });
+  document.getElementById('grid').innerHTML = scores.map(v => renderCard(v, dayInt, hour)).join('');
 }
 
-// Generated-at footer
 if (DATA.generated_at) {
   const d = new Date(DATA.generated_at);
   document.getElementById('generated-at').textContent =
