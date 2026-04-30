@@ -420,9 +420,21 @@
   .alcoblow-sub {
     color: var(--text-dim);
     font-size: 0.8125rem;
-    margin-bottom: 1.25rem;
+    margin-bottom: 0.75rem;
     position: relative;
+    line-height: 1.65;
   }
+  .alcoblow-sub-strong {
+    color: var(--text);
+    font-size: 0.875rem;
+    background: rgba(255, 51, 85, 0.06);
+    border-left: 3px solid var(--red);
+    padding: 0.875rem 1rem;
+    border-radius: 4px;
+    margin-bottom: 1rem;
+  }
+  .alcoblow-sub-strong strong { color: var(--red); }
+  .alcoblow-list { margin-top: 1.25rem; }
   .alcoblow-cta {
     margin-top: 1.25rem;
     padding: 0.875rem 1rem;
@@ -559,13 +571,18 @@
   <section class="alcoblow" id="alcoblow" hidden>
     <div class="alcoblow-head">
       <svg class="alcoblow-icon"><use href="#icon-alert"/></svg>
-      <h2 class="alcoblow-title">Alcoblow Intel — Plan Your Ride Home</h2>
+      <h2 class="alcoblow-title">Don't Drink &amp; Drive — Plan Your Ride Home</h2>
     </div>
-    <p class="alcoblow-sub">Community-aggregated checkpoint zones. Police rotate locations — checkpoints can appear anywhere, anytime. This is reference intel, not real-time tracking.</p>
+    <p class="alcoblow-sub alcoblow-sub-strong">
+      <strong>Drink-driving is illegal in Kenya.</strong> Under the Traffic Act, you risk license suspension, fines up to KSh 100,000, and imprisonment up to 2 years. More importantly: it kills people. <strong>NVI does not help anyone evade lawful police checks.</strong>
+    </p>
+    <p class="alcoblow-sub">
+      The zones below are where Nairobi alcoblow checkpoints <em>commonly</em> operate. They rotate &mdash; checkpoints can appear anywhere at any time. Use this list to <strong>plan your ride home before your first drink</strong>, not to dodge enforcement.
+    </p>
     <div class="alcoblow-list" id="alcoblow-list"></div>
     <div class="alcoblow-cta">
       <svg style="width: 18px; height: 18px; color: var(--magenta); flex-shrink: 0;"><use href="#icon-pin"/></svg>
-      <span>If you're drinking, <strong>book Bolt or Uber</strong> before leaving the venue. Don't drive.</span>
+      <span>Already out? <strong>Don't drive home.</strong> Open <a href="https://bolt.eu/en/cities/nairobi/" target="_blank" rel="noopener" style="color: var(--magenta); text-decoration: underline;">Bolt</a> or <a href="https://m.uber.com/looking?drop[0]=&amp;pickup=" target="_blank" rel="noopener" style="color: var(--magenta); text-decoration: underline;">Uber</a> from inside the venue.</span>
     </div>
   </section>
 
