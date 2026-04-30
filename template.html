@@ -376,6 +376,112 @@
     padding-top: 0.25rem;
   }
 
+  /* ============ Alcoblow intel panel ============ */
+  .alcoblow {
+    margin-top: 2.5rem;
+    background: var(--bg-card);
+    border: 1px solid rgba(255, 204, 0, 0.3);
+    border-radius: 14px;
+    padding: 1.75rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .alcoblow::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(ellipse at top right, rgba(255, 204, 0, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom left, rgba(255, 51, 85, 0.04), transparent 50%);
+    pointer-events: none;
+  }
+  .alcoblow-head {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+    position: relative;
+  }
+  .alcoblow-icon {
+    width: 24px;
+    height: 24px;
+    color: var(--yellow);
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 6px rgba(255, 204, 0, 0.4));
+  }
+  .alcoblow-title {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.875rem;
+    font-weight: 700;
+    color: var(--yellow);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+  .alcoblow-sub {
+    color: var(--text-dim);
+    font-size: 0.8125rem;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+  .alcoblow-cta {
+    margin-top: 1.25rem;
+    padding: 0.875rem 1rem;
+    background: rgba(255, 45, 146, 0.08);
+    border: 1px solid rgba(255, 45, 146, 0.3);
+    border-radius: 8px;
+    color: var(--text);
+    font-size: 0.875rem;
+    font-weight: 500;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 0.625rem;
+  }
+  .alcoblow-cta strong { color: var(--magenta); }
+  .alcoblow-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 0.625rem;
+    position: relative;
+  }
+  .ab-row {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 0.75rem;
+    align-items: start;
+    padding: 0.875rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .ab-freq {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    padding: 0.25rem 0.5rem;
+    border-radius: 4px;
+    border: 1px solid;
+    align-self: start;
+    flex-shrink: 0;
+  }
+  .ab-freq.ab-HIGH   { color: var(--red);    border-color: var(--red);    background: rgba(255, 51, 85, 0.08); }
+  .ab-freq.ab-MEDIUM { color: var(--orange); border-color: var(--orange); background: rgba(255, 140, 51, 0.08); }
+  .ab-freq.ab-LOW    { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 204, 0, 0.06); }
+  .ab-info { min-width: 0; }
+  .ab-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    margin-bottom: 0.125rem;
+    color: var(--text);
+  }
+  .ab-when {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-dim);
+    letter-spacing: 0.05em;
+  }
+
   /* ============ Empty / closed state ============ */
   .empty-state {
     grid-column: 1 / -1;
@@ -450,6 +556,19 @@
 
   <div class="grid" id="grid"></div>
 
+  <section class="alcoblow" id="alcoblow" hidden>
+    <div class="alcoblow-head">
+      <svg class="alcoblow-icon"><use href="#icon-alert"/></svg>
+      <h2 class="alcoblow-title">Alcoblow Intel — Plan Your Ride Home</h2>
+    </div>
+    <p class="alcoblow-sub">Community-aggregated checkpoint zones. Police rotate locations — checkpoints can appear anywhere, anytime. This is reference intel, not real-time tracking.</p>
+    <div class="alcoblow-list" id="alcoblow-list"></div>
+    <div class="alcoblow-cta">
+      <svg style="width: 18px; height: 18px; color: var(--magenta); flex-shrink: 0;"><use href="#icon-pin"/></svg>
+      <span>If you're drinking, <strong>book Bolt or Uber</strong> before leaving the venue. Don't drive.</span>
+    </div>
+  </section>
+
   <footer>
     <p><strong>Methodology:</strong> Vibe scores are weekly foot-traffic forecasts (0–100% relative to each venue's own peak) sourced from <a href="https://besttime.app" style="color: var(--cyan)">BestTime.app</a>. The badge for each venue reflects its current intensity for the present Nairobi day-of-week and hour. The chart inside each card is today's full 24-hour curve.</p>
     <p><strong>Coverage:</strong> Limited to Nairobi venues with sufficient public foot-traffic data. Many iconic spots aren't yet indexed — working on it.</p>
@@ -485,6 +604,11 @@
   <symbol id="icon-pin" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
     <path d="M20 10c0 7-8 12-8 12s-8-5-8-12a8 8 0 0 1 16 0z"/>
     <circle cx="12" cy="10" r="3"/>
+  </symbol>
+  <symbol id="icon-alert" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10.29 3.86 1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/>
+    <line x1="12" y1="9" x2="12" y2="13"/>
+    <line x1="12" y1="17" x2="12.01" y2="17"/>
   </symbol>
 </svg>
 
@@ -629,6 +753,30 @@ if (DATA.generated_at) {
   document.getElementById('generated-at').textContent =
     d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
 }
+
+// ============ Alcoblow intel panel ============
+function renderAlcoblow() {
+  const hotspots = DATA.alcoblow || [];
+  if (hotspots.length === 0) return;
+
+  const order = { HIGH: 0, MEDIUM: 1, LOW: 2 };
+  const sorted = [...hotspots].sort((a, b) =>
+    (order[a.frequency] ?? 9) - (order[b.frequency] ?? 9)
+  );
+
+  document.getElementById('alcoblow-list').innerHTML = sorted.map(h => `
+    <div class="ab-row">
+      <span class="ab-freq ab-${h.frequency}">${h.frequency}</span>
+      <div class="ab-info">
+        <div class="ab-name">${escapeHtml(h.name)}</div>
+        <div class="ab-when">${escapeHtml(h.days)} · ${escapeHtml(h.hours)}</div>
+      </div>
+    </div>
+  `).join('');
+  document.getElementById('alcoblow').hidden = false;
+}
+
+renderAlcoblow();
 
 // ============ Filter chip strip ============
 let activeFilter = 'all';
