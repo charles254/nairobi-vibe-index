@@ -620,14 +620,26 @@
 
   .card-head {
     display: flex;
-    align-items: center;
+    align-items: flex-start;
     gap: 0.75rem;
     margin-bottom: 1rem;
+  }
+  .card-head-text {
+    flex: 1;
+    min-width: 0;
+  }
+  .card-head-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem 0.625rem;
+    align-items: center;
+    margin-top: 0.4rem;
   }
   .card-icon {
     width: 24px;
     height: 24px;
     flex-shrink: 0;
+    margin-top: 0.125rem;
   }
   .card-icon.cat-Nightclub  { color: var(--magenta); filter: drop-shadow(0 0 6px rgba(255, 45, 146, 0.4)); }
   .card-icon.cat-Bar        { color: var(--cyan);    filter: drop-shadow(0 0 6px rgba(0, 214, 255, 0.4)); }
@@ -653,14 +665,12 @@
     font-family: 'JetBrains Mono', monospace;
     font-size: 0.9375rem;
     font-weight: 700;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--text);
-    flex: 1;
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
+    line-height: 1.25;
+    word-break: break-word;
+    /* names now wrap to 2 lines if needed instead of truncating */
   }
   .card-area {
     flex-shrink: 0;
@@ -1339,9 +1349,13 @@ function renderListedCard(venue) {
     <article class="card listed" data-area="${escapeHtml(area)}" data-category="${escapeHtml(cat)}" data-name="${escapeHtml(venue.name.toLowerCase())}" data-listed="1">
       <div class="card-head">
         <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
-        <h3 class="card-name">${escapeHtml(venue.name)}</h3>
-        <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
-        <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
+        <div class="card-head-text">
+          <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+          <div class="card-head-meta">
+            <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
+            <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
+          </div>
+        </div>
       </div>
       <div class="card-meta-row">
         <span class="badge badge-await">○ Awaiting data</span>
@@ -1386,9 +1400,13 @@ function renderCard(venue, dayInt, hour) {
       ${peaksBadge}
       <div class="card-head">
         <svg class="card-icon cat-${catSafe}"><use href="#icon-${catSafe}"/></svg>
-        <h3 class="card-name">${escapeHtml(venue.name)}</h3>
-        <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
-        <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
+        <div class="card-head-text">
+          <h3 class="card-name">${escapeHtml(venue.name)}</h3>
+          <div class="card-head-meta">
+            <span class="card-cat cat-${catSafe}">${escapeHtml(cat)}</span>
+            <span class="card-area"><svg><use href="#icon-pin"/></svg>${escapeHtml(area)}</span>
+          </div>
+        </div>
       </div>
       <div class="card-meta-row">
         <span class="badge ${badge.cls}">
