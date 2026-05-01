@@ -546,6 +546,8 @@
   .card.peaks-now {
     box-shadow: 0 0 0 1px var(--magenta), 0 0 24px rgba(255, 45, 146, 0.25);
   }
+  /* Leave space for the absolute-positioned badge so long names don't overlap it */
+  .card.peaks-now .card-head { padding-right: 6rem; }
   .peaks-now-badge {
     position: absolute;
     top: 0.875rem;
