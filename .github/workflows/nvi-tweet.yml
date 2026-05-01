@@ -1,0 +1,24 @@
+name: NVI Daily Tweet
+on:
+  schedule:
+    # 17:30 EAT every day (= 14:30 UTC)
+    - cron: "30 14 * * *"
+    # 21:00 EAT on Fri & Sat (= 18:00 UTC)
+    - cron: "0 18 * * 5,6"
+  workflow_dispatch: {}    # allow manual trigger from the Actions tab
+
+jobs:
+  tweet:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+      - run: pip install -r tweet-requirements.txt
+      - run: python nvi_tweet.py
+        env:
+          X_API_KEY:        ${{ secrets.X_API_KEY }}
+          X_API_SECRET:     ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN:   ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET:  ${{ secrets.X_ACCESS_SECRET }}

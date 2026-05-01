@@ -220,6 +220,101 @@
     background: rgba(255, 255, 255, 0.15);
   }
 
+  /* ============ BarMatch owner banner ============ */
+  .barmatch-banner {
+    margin-bottom: 2rem;
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, rgba(255, 45, 146, 0.12), rgba(0, 214, 255, 0.06));
+    border: 1px solid rgba(255, 45, 146, 0.35);
+    border-radius: 12px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+    justify-content: space-between;
+  }
+  .barmatch-banner-text {
+    flex: 1 1 320px;
+    min-width: 0;
+  }
+  .barmatch-banner-eyebrow {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 700;
+    color: var(--magenta);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-bottom: 0.375rem;
+  }
+  .barmatch-banner-headline {
+    font-size: 1.0625rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 0.25rem;
+  }
+  .barmatch-banner-sub {
+    color: var(--text-dim);
+    font-size: 0.8125rem;
+    line-height: 1.5;
+  }
+  .barmatch-banner-cta {
+    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.75rem 1.25rem;
+    background: var(--magenta);
+    color: white;
+    border-radius: 8px;
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    transition: all 0.15s ease;
+    box-shadow: 0 0 16px rgba(255, 45, 146, 0.35);
+  }
+  .barmatch-banner-cta:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 24px rgba(255, 45, 146, 0.55);
+  }
+
+  /* Per-card claim + ride links — small, subtle, low-priority footer row */
+  .card-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+    margin-top: 0.875rem;
+    padding-top: 0.625rem;
+    border-top: 1px solid var(--border);
+  }
+  .card-action {
+    flex: 1 1 auto;
+    min-width: 0;
+    text-align: center;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.625rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    text-decoration: none;
+    padding: 0.4rem 0.5rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+  }
+  .card-action.claim:hover {
+    color: var(--magenta);
+    border-color: var(--magenta);
+  }
+  .card-action.bolt:hover, .card-action.uber:hover {
+    color: var(--cyan);
+    border-color: var(--cyan);
+  }
+
   /* ============ NVI Signals panel ============ */
   .signals {
     margin-bottom: 2rem;
@@ -1025,6 +1120,15 @@
     </div>
   </div>
 
+  <a class="barmatch-banner" id="barmatch-banner" href="#" hidden>
+    <div class="barmatch-banner-text">
+      <div class="barmatch-banner-eyebrow">For venue owners</div>
+      <div class="barmatch-banner-headline">Own one of the 287 venues we track?</div>
+      <div class="barmatch-banner-sub">Claim your spot — get verified, customize your profile, see foot-traffic vs your comp set, and push promos to NVI users on slow nights.</div>
+    </div>
+    <span class="barmatch-banner-cta">Claim my venue →</span>
+  </a>
+
   <section class="signals" id="signals" hidden>
     <div class="signals-head">
       <svg class="signals-icon"><use href="#icon-signals"/></svg>
@@ -1301,6 +1405,11 @@ function renderCard(venue, dayInt, hour) {
       <div class="chart-axis">
         <span>12a</span><span>6a</span><span>12p</span><span>6p</span><span>12a</span>
       </div>
+      <div class="card-actions">
+        <a class="card-action claim" href="${escapeHtml(withUtm(DATA.barmatch_url || '#', 'nvi', 'card-claim'))}" title="Are you the owner? Claim this venue.">Own this? Claim</a>
+        <a class="card-action bolt" href="${escapeHtml(DATA.bolt_url || '#')}" target="_blank" rel="noopener" title="Don't drink &amp; drive — book a Bolt">🚖 Bolt</a>
+        <a class="card-action uber" href="${escapeHtml(DATA.uber_url || '#')}" target="_blank" rel="noopener" title="Don't drink &amp; drive — book an Uber">🚖 Uber</a>
+      </div>
     </article>
   `;
 }
@@ -1366,6 +1475,18 @@ if (DATA.generated_at) {
   const d = new Date(DATA.generated_at);
   document.getElementById('generated-at').textContent =
     d.toISOString().slice(0, 16).replace('T', ' ') + ' UTC';
+}
+
+// ============ BarMatch owner banner ============
+function withUtm(url, source, medium) {
+  if (!url || !/^https?:/.test(url)) return url || '#';
+  const sep = url.includes('?') ? '&' : '?';
+  return url + sep + 'utm_source=' + encodeURIComponent(source) + '&utm_medium=' + encodeURIComponent(medium);
+}
+if (DATA.barmatch_url) {
+  const bm = document.getElementById('barmatch-banner');
+  bm.href = withUtm(DATA.barmatch_url, 'nvi', 'banner');
+  bm.hidden = false;
 }
 
 // ============ NVI Signals panel ============
