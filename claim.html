@@ -28,6 +28,8 @@
     --green: #00d680; --yellow: #ffcc00; --red: #ff3355;
   }
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  /* `hidden` attribute beats display:flex/grid set on .selected-venue, .step, etc. */
+  [hidden] { display: none !important; }
   html, body { background: var(--bg); }
   body {
     font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
