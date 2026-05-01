@@ -1,0 +1,871 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Claim your venue — NVI</title>
+<meta name="description" content="Claim your venue on the Nairobi Vibe Index. 3 quick steps — we'll WhatsApp you within 24h.">
+<meta name="theme-color" content="#07080d">
+
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://charles254.github.io/nairobi-vibe-index/claim.html">
+<meta property="og:title" content="Claim your venue on NVI">
+<meta property="og:description" content="3 quick steps. We'll WhatsApp you within 24h.">
+<meta property="og:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%2307080d%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%23ff2d92%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.35em%22%20font-family%3D%22monospace%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ff2d92%22%3ENVI%3C%2Ftext%3E%3C%2Fsvg%3E">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+
+<style>
+  :root {
+    --bg: #07080d; --bg-card: #0e1019; --bg-card-hi: #141826;
+    --border: #1c2237; --border-hi: #2a3252;
+    --text: #e8edf7; --text-dim: #8896b8; --text-faint: #4d5878;
+    --magenta: #ff2d92; --cyan: #00d6ff;
+    --green: #00d680; --yellow: #ffcc00; --red: #ff3355;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { background: var(--bg); }
+  body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    color: var(--text);
+    line-height: 1.55;
+    min-height: 100vh;
+    padding: 2rem 1rem 4rem;
+    -webkit-font-smoothing: antialiased;
+    background:
+      radial-gradient(ellipse at top, rgba(255, 45, 146, 0.08), transparent 50%),
+      radial-gradient(ellipse at bottom right, rgba(0, 214, 255, 0.05), transparent 50%),
+      var(--bg);
+  }
+  .mono { font-family: 'JetBrains Mono', 'Courier New', monospace; }
+  .container { max-width: 720px; margin: 0 auto; }
+
+  /* ============ Header ============ */
+  header { padding-bottom: 1.5rem; }
+  .nav-brand {
+    font-family: 'Press Start 2P', monospace;
+    font-size: 1.5rem;
+    color: var(--magenta);
+    text-decoration: none;
+    text-shadow: 0 0 12px rgba(255, 45, 146, 0.4);
+    letter-spacing: 0.05em;
+  }
+  .nav-back {
+    color: var(--text-dim);
+    text-decoration: none;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-left: 1rem;
+  }
+  .nav-back:hover { color: var(--magenta); }
+  h1 {
+    font-size: clamp(1.5rem, 4vw, 2rem);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    margin-top: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  .subhead { color: var(--text-dim); font-size: 0.9375rem; }
+
+  /* ============ Progress bar ============ */
+  .progress {
+    display: flex;
+    gap: 0.5rem;
+    margin: 2rem 0 1.75rem;
+  }
+  .progress-step {
+    flex: 1;
+    text-align: center;
+    padding: 0.75rem 0.5rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--text-faint);
+    transition: all 0.2s ease;
+  }
+  .progress-step.active {
+    background: rgba(255, 45, 146, 0.12);
+    border-color: var(--magenta);
+    color: var(--magenta);
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.2);
+  }
+  .progress-step.done {
+    border-color: var(--cyan);
+    color: var(--cyan);
+  }
+  .progress-num {
+    display: inline-block;
+    margin-right: 0.4rem;
+    font-weight: 700;
+  }
+
+  /* ============ Step container ============ */
+  .step {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+  }
+  .step h2 {
+    font-size: 1.25rem;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+  }
+  .step-hint {
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    margin-bottom: 1.25rem;
+  }
+  .field { margin-bottom: 1.25rem; }
+  .field-label {
+    display: block;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  /* ============ Inputs ============ */
+  input[type="text"], input[type="email"], input[type="tel"], select {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text);
+    font-family: 'Inter', sans-serif;
+    font-size: 0.9375rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+  input::placeholder { color: var(--text-faint); }
+  input:focus, select:focus {
+    outline: none;
+    border-color: var(--magenta);
+    box-shadow: 0 0 0 3px rgba(255, 45, 146, 0.15);
+  }
+
+  /* ============ Autocomplete ============ */
+  .ac-wrap { position: relative; }
+  .ac-list {
+    position: absolute;
+    top: calc(100% + 4px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card-hi);
+    border: 1px solid var(--border-hi);
+    border-radius: 8px;
+    max-height: 280px;
+    overflow-y: auto;
+    z-index: 10;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
+    display: none;
+  }
+  .ac-list.show { display: block; }
+  .ac-item {
+    padding: 0.625rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
+    transition: background 0.1s;
+  }
+  .ac-item:last-child { border-bottom: none; }
+  .ac-item:hover, .ac-item.highlighted {
+    background: rgba(255, 45, 146, 0.1);
+    color: var(--text);
+  }
+  .ac-item-meta {
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    margin-left: 0.5rem;
+  }
+  .ac-empty {
+    padding: 1rem;
+    color: var(--text-dim);
+    font-size: 0.875rem;
+    text-align: center;
+  }
+
+  .selected-venue {
+    margin-top: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: rgba(0, 214, 255, 0.06);
+    border: 1px solid rgba(0, 214, 255, 0.3);
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 0.75rem;
+  }
+  .selected-venue-name { font-weight: 600; color: var(--text); }
+  .selected-venue-meta {
+    color: var(--cyan);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+  }
+  .selected-venue-clear {
+    background: none;
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    padding: 0.3rem 0.625rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    cursor: pointer;
+  }
+  .selected-venue-clear:hover { color: var(--magenta); border-color: var(--magenta); }
+
+  .add-new-link {
+    display: inline-block;
+    margin-top: 0.75rem;
+    color: var(--text-dim);
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 0.875rem;
+    text-decoration: underline;
+    text-underline-offset: 3px;
+    padding: 0;
+  }
+  .add-new-link:hover { color: var(--cyan); }
+
+  .new-venue-fields {
+    margin-top: 1rem;
+    padding: 1rem;
+    border: 1px dashed var(--border-hi);
+    border-radius: 8px;
+  }
+  .new-venue-fields .field { margin-bottom: 0.875rem; }
+  .new-venue-fields .field:last-child { margin-bottom: 0; }
+
+  /* ============ Radio cards ============ */
+  .radio-cards { display: grid; gap: 0.625rem; }
+  .radio-card {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.75rem;
+    padding: 0.875rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.15s ease;
+  }
+  .radio-card:hover { border-color: var(--border-hi); }
+  .radio-card input[type="radio"] {
+    margin-top: 0.2rem;
+    accent-color: var(--magenta);
+    flex-shrink: 0;
+  }
+  .radio-card input[type="radio"]:checked ~ .radio-card-text { color: var(--text); }
+  .radio-card:has(input[type="radio"]:checked) {
+    border-color: var(--magenta);
+    background: rgba(255, 45, 146, 0.06);
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.15);
+  }
+  .radio-card-text { flex: 1; font-size: 0.9375rem; line-height: 1.4; }
+  .radio-card-hint {
+    display: block;
+    color: var(--text-dim);
+    font-size: 0.8125rem;
+    margin-top: 0.2rem;
+  }
+
+  /* ============ Priority ranker ============ */
+  .ranker { display: grid; gap: 0.625rem; }
+  .rank-row {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.75rem 1rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .rank-row select {
+    width: 70px;
+    flex-shrink: 0;
+    text-align: center;
+    font-weight: 700;
+  }
+  .rank-row-label { flex: 1; font-size: 0.9375rem; }
+
+  /* ============ Checkbox ============ */
+  .checkbox-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.625rem;
+    margin-top: 1rem;
+  }
+  .checkbox-row input { accent-color: var(--magenta); margin-top: 0.2rem; }
+  .checkbox-row label { font-size: 0.875rem; color: var(--text-dim); cursor: pointer; }
+
+  /* ============ Buttons ============ */
+  .actions {
+    display: flex;
+    gap: 0.75rem;
+    justify-content: space-between;
+    margin-top: 1.75rem;
+  }
+  .btn {
+    padding: 0.875rem 1.5rem;
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border: 1px solid var(--border);
+    background: var(--bg-card-hi);
+    color: var(--text);
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    transition: all 0.15s ease;
+  }
+  .btn:hover { border-color: var(--border-hi); }
+  .btn-primary {
+    background: var(--magenta);
+    border-color: var(--magenta);
+    color: white;
+    box-shadow: 0 0 12px rgba(255, 45, 146, 0.35);
+  }
+  .btn-primary:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 0 18px rgba(255, 45, 146, 0.55);
+  }
+  .btn-primary:disabled {
+    background: var(--border);
+    color: var(--text-faint);
+    border-color: var(--border);
+    cursor: not-allowed;
+    box-shadow: none;
+    transform: none;
+  }
+
+  /* ============ Confirmation ============ */
+  .done-icon {
+    width: 56px;
+    height: 56px;
+    border-radius: 50%;
+    background: rgba(0, 214, 128, 0.12);
+    border: 2px solid var(--green);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--green);
+    font-size: 2rem;
+    margin-bottom: 1rem;
+  }
+  .message-preview {
+    margin: 1.25rem 0;
+    padding: 1.25rem;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.8125rem;
+    line-height: 1.6;
+    white-space: pre-wrap;
+    color: var(--text);
+    overflow-x: auto;
+  }
+  .send-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+  }
+  .toast {
+    position: fixed;
+    bottom: 1.5rem;
+    left: 50%;
+    transform: translateX(-50%) translateY(120%);
+    padding: 0.75rem 1.25rem;
+    background: var(--green);
+    color: var(--bg);
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.875rem;
+    box-shadow: 0 8px 24px rgba(0, 214, 128, 0.3);
+    transition: transform 0.25s ease;
+    z-index: 100;
+  }
+  .toast.show { transform: translateX(-50%) translateY(0); }
+
+  .err {
+    color: var(--red);
+    font-size: 0.8125rem;
+    margin-top: 0.4rem;
+    display: none;
+  }
+  .err.show { display: block; }
+
+  footer {
+    margin-top: 2rem;
+    color: var(--text-faint);
+    font-size: 0.75rem;
+    text-align: center;
+  }
+
+  @media (max-width: 600px) {
+    body { padding: 1.25rem 0.75rem 3rem; }
+    .step { padding: 1.25rem; }
+    .progress-step { font-size: 0.5625rem; padding: 0.625rem 0.25rem; letter-spacing: 0.08em; }
+    .send-buttons { grid-template-columns: 1fr; }
+    .actions { flex-direction: column-reverse; }
+    .btn { width: 100%; justify-content: center; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+  <header>
+    <a href="./" class="nav-brand">NVI</a>
+    <a href="./" class="nav-back">← Dashboard</a>
+    <h1>Claim your venue</h1>
+    <p class="subhead">Three quick steps. We'll WhatsApp you within 24 hours.</p>
+  </header>
+
+  <div class="progress">
+    <div class="progress-step active" data-step="1"><span class="progress-num">1</span>Identify</div>
+    <div class="progress-step" data-step="2"><span class="progress-num">2</span>Verify</div>
+    <div class="progress-step" data-step="3"><span class="progress-num">3</span>Priorities</div>
+  </div>
+
+  <!-- ============ STEP 1: Identify the venue ============ -->
+  <section class="step" id="step-1">
+    <h2>Identify your venue</h2>
+    <p class="step-hint">Search the 287 venues we already track, or add a new one.</p>
+
+    <div class="field">
+      <label class="field-label" for="venue-search">Venue name</label>
+      <div class="ac-wrap">
+        <input type="text" id="venue-search" placeholder="Type to search… e.g. Tribeka, Java House" autocomplete="off">
+        <div class="ac-list" id="ac-list" role="listbox"></div>
+      </div>
+      <div id="selected-venue" class="selected-venue" hidden>
+        <div>
+          <div class="selected-venue-name" id="sv-name"></div>
+          <div class="selected-venue-meta mono" id="sv-meta"></div>
+        </div>
+        <button type="button" class="selected-venue-clear" id="sv-clear">Change</button>
+      </div>
+      <button type="button" class="add-new-link" id="add-new-btn">Don't see your venue? Add it →</button>
+      <div class="err" id="err-venue">Pick a venue or add a new one.</div>
+    </div>
+
+    <div class="new-venue-fields" id="new-venue-fields" hidden>
+      <div class="field">
+        <label class="field-label" for="new-name">New venue name</label>
+        <input type="text" id="new-name" placeholder="The Alchemist Bar">
+      </div>
+      <div class="field">
+        <label class="field-label" for="new-area">Area</label>
+        <input type="text" id="new-area" placeholder="Westlands / Kilimani / Karen / etc." list="known-areas">
+        <datalist id="known-areas"></datalist>
+      </div>
+      <div class="field">
+        <label class="field-label" for="new-category">Category</label>
+        <select id="new-category">
+          <option value="Bar">Bar</option>
+          <option value="Restaurant">Restaurant</option>
+          <option value="Lounge">Lounge</option>
+          <option value="Nightclub">Nightclub</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="actions">
+      <span></span>
+      <button class="btn btn-primary" id="next-1">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============ STEP 2: Prove ownership ============ -->
+  <section class="step" id="step-2" hidden>
+    <h2>Prove ownership</h2>
+    <p class="step-hint">Pick one verification method. We'll confirm via WhatsApp before activating your venue.</p>
+
+    <div class="field">
+      <label class="field-label">Verification method</label>
+      <div class="radio-cards">
+        <label class="radio-card">
+          <input type="radio" name="verify" value="M-Pesa Till receipt photo">
+          <span class="radio-card-text">M-Pesa Till receipt photo
+            <span class="radio-card-hint">A receipt that matches the venue's till number</span>
+          </span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="verify" value="KRA business certificate">
+          <span class="radio-card-text">KRA business certificate
+            <span class="radio-card-hint">PIN certificate or business permit naming the venue</span>
+          </span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="verify" value="On-site photo with date">
+          <span class="radio-card-text">Photo of yourself in the venue with today's date
+            <span class="radio-card-hint">Hold a piece of paper with today's date written down</span>
+          </span>
+        </label>
+        <label class="radio-card">
+          <input type="radio" name="verify" value="Domain email">
+          <span class="radio-card-text">Email from a domain matching the venue
+            <span class="radio-card-hint">e.g. hello@thealchemist.co.ke</span>
+          </span>
+        </label>
+      </div>
+      <div class="err" id="err-verify">Pick a verification method.</div>
+    </div>
+
+    <div class="field">
+      <label class="field-label" for="whatsapp">Owner phone (WhatsApp)</label>
+      <input type="tel" id="whatsapp" placeholder="+254 7XX XXX XXX" inputmode="tel">
+      <div class="err" id="err-whatsapp">Phone number is required.</div>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="back-2">← Back</button>
+      <button class="btn btn-primary" id="next-2">Next →</button>
+    </div>
+  </section>
+
+  <!-- ============ STEP 3: Priorities ============ -->
+  <section class="step" id="step-3" hidden>
+    <h2>What unlocks the most value for you?</h2>
+    <p class="step-hint">Rank these 1–4 (1 = most important). Helps us build the BarMatch features owners actually want.</p>
+
+    <div class="ranker" id="ranker">
+      <div class="rank-row" data-id="comp">
+        <select class="rank-select"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        <span class="rank-row-label">See foot-traffic vs my comp set (similar venues nearby)</span>
+      </div>
+      <div class="rank-row" data-id="promo">
+        <select class="rank-select"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        <span class="rank-row-label">Push promotions to NVI users on slow nights</span>
+      </div>
+      <div class="rank-row" data-id="profile">
+        <select class="rank-select"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        <span class="rank-row-label">Customize my venue profile (logo, photos, hours)</span>
+      </div>
+      <div class="rank-row" data-id="reservations">
+        <select class="rank-select"><option value="">—</option><option>1</option><option>2</option><option>3</option><option>4</option></select>
+        <span class="rank-row-label">Get reservation enquiries from NVI users</span>
+      </div>
+    </div>
+    <div class="err" id="err-ranker">Rank all four (each number 1–4 used exactly once).</div>
+
+    <div class="field" style="margin-top: 1.25rem;">
+      <label class="field-label" for="email">Email (for updates)</label>
+      <input type="email" id="email" placeholder="you@yourvenue.co.ke">
+    </div>
+
+    <div class="checkbox-row">
+      <input type="checkbox" id="opt-in" checked>
+      <label for="opt-in">Email me NVI updates for venue owners (BarMatch launch, promotions, etc.)</label>
+    </div>
+
+    <div class="actions">
+      <button class="btn" id="back-3">← Back</button>
+      <button class="btn btn-primary" id="submit-btn">Submit claim →</button>
+    </div>
+  </section>
+
+  <!-- ============ DONE: Confirmation ============ -->
+  <section class="step" id="step-done" hidden>
+    <div class="done-icon">✓</div>
+    <h2>Almost there — send your claim</h2>
+    <p class="step-hint">Tap one button below to deliver your claim. We'll WhatsApp you within 24h to verify and activate your venue.</p>
+
+    <div class="message-preview" id="message-preview"></div>
+
+    <div class="send-buttons">
+      <a class="btn btn-primary" id="telegram-send" href="#" target="_blank" rel="noopener">📤 Send via Telegram</a>
+      <button class="btn" id="copy-btn">📋 Copy to clipboard</button>
+    </div>
+    <p class="step-hint" style="font-size: 0.8125rem;">Telegram opens a share sheet — pick the <code>nvi_reports</code> group or DM <code>@nairobi_vibe_index_bot</code>. If you copied instead, paste into your favourite messaging app to <strong>+254 — your operator</strong> and we'll receive it.</p>
+
+    <div class="actions">
+      <a href="./" class="btn">← Back to dashboard</a>
+      <button class="btn" id="restart-btn">Submit another →</button>
+    </div>
+  </section>
+
+  <footer>
+    Drink responsibly. NVI does not endorse driving after drinking.
+  </footer>
+</div>
+
+<div class="toast" id="toast">Copied to clipboard</div>
+
+<script>
+const VENUES = [{"name": "40Forty Lounge", "area": "Westlands", "category": "Nightclub"}, {"name": "Artcaff\u00e9 Restaurant Mwanzi Road", "area": "Westlands", "category": "Restaurant"}, {"name": "Ashaki Grill", "area": "Kilimani", "category": "Restaurant"}, {"name": "BLACK STARS Club & Lounge", "area": "Kilimani", "category": "Nightclub"}, {"name": "Big Square Wilson", "area": "Lang'ata", "category": "Restaurant"}, {"name": "Brew Bistro Fortis", "area": "Westlands", "category": "Restaurant"}, {"name": "Fogo Gaucho Kilimani", "area": "Kilimani", "category": "Restaurant"}, {"name": "For You Chinese Restaurant", "area": "Lavington", "category": "Restaurant"}, {"name": "Havana Bar & Restaurant", "area": "Westlands", "category": "Bar"}, {"name": "Hb Pub Umoja", "area": "Umoja", "category": "Bar"}, {"name": "Java House - Sarit Centre", "area": "Westlands", "category": "Restaurant"}, {"name": "K1 Klub House", "area": "Westlands", "category": "Nightclub"}, {"name": "Kilimanjaro Jamia, Kimathi Street", "area": "CBD", "category": "Restaurant"}, {"name": "Mwenda's Pub and cocktails", "area": "CBD", "category": "Bar"}, {"name": "Nairobi west mall", "area": "Nairobi West", "category": "Bar"}, {"name": "Number 7 Cocktail bar", "area": "CBD", "category": "Bar"}, {"name": "Plan B Pub & Butchery", "area": "Hurlingham", "category": "Bar"}, {"name": "Scratch Bar", "area": "CBD", "category": "Bar"}, {"name": "Talisman Restaurant", "area": "Karen", "category": "Restaurant"}, {"name": "The Carnivore Restaurant", "area": "Lang'ata", "category": "Restaurant"}, {"name": "The Tunnel", "area": "Embakasi", "category": "Nightclub"}, {"name": "XS Millionaires Club", "area": "Upper Hill", "category": "Nightclub"}, {"name": "The Alchemist Bar", "area": "Westlands", "category": "Bar"}, {"name": "Tribeka Lounge", "area": "Westlands", "category": "Nightclub"}, {"name": "Sankara Sky Bar", "area": "Westlands", "category": "Lounge"}, {"name": "Mojos Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "J's Fresh Bar & Kitchen", "area": "Westlands", "category": "Restaurant"}, {"name": "Sippers Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Caramel Restaurant", "area": "Westlands", "category": "Restaurant"}, {"name": "Cubano Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Choices Pub", "area": "Westlands", "category": "Bar"}, {"name": "Onyx Restaurant", "area": "Westlands", "category": "Restaurant"}, {"name": "Score Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Hidden Agenda", "area": "Westlands", "category": "Lounge"}, {"name": "Galileo Lounge", "area": "Westlands", "category": "Nightclub"}, {"name": "Mercury Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Eka Hotel Bar", "area": "Westlands", "category": "Bar"}, {"name": "Nyama Mama Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Kiza Lounge", "area": "Kilimani", "category": "Lounge"}, {"name": "Inca Lounge & Bistro", "area": "Kilimani", "category": "Bar"}, {"name": "Cucina Restaurant", "area": "Kilimani", "category": "Restaurant"}, {"name": "Tin Roof Cafe", "area": "Kilimani", "category": "Restaurant"}, {"name": "About Thyme", "area": "Kilimani", "category": "Restaurant"}, {"name": "Le Grenier Pain", "area": "Kilimani", "category": "Restaurant"}, {"name": "Java House Yaya", "area": "Kilimani", "category": "Restaurant"}, {"name": "7th Heaven", "area": "Kilimani", "category": "Lounge"}, {"name": "Mercury Kilimani", "area": "Kilimani", "category": "Lounge"}, {"name": "Wasp & Sprout", "area": "Kilimani", "category": "Restaurant"}, {"name": "Mawingu Lounge", "area": "Lavington", "category": "Lounge"}, {"name": "The Lord Erroll", "area": "Lavington", "category": "Restaurant"}, {"name": "For You Chinese Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "Lavington Mall Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Bistro Brio", "area": "Lavington", "category": "Restaurant"}, {"name": "Trattoria Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "Pallet Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Lavington Tavern", "area": "Lavington", "category": "Bar"}, {"name": "Sarova Stanley Bar", "area": "CBD", "category": "Bar"}, {"name": "Hilton Bar", "area": "CBD", "category": "Bar"}, {"name": "InterContinental Bar", "area": "CBD", "category": "Bar"}, {"name": "Florida 2000", "area": "CBD", "category": "Nightclub"}, {"name": "Tamarind Restaurant", "area": "CBD", "category": "Restaurant"}, {"name": "Sundowner Restaurant", "area": "CBD", "category": "Restaurant"}, {"name": "Simmers Restaurant", "area": "CBD", "category": "Restaurant"}, {"name": "Trattoria CBD", "area": "CBD", "category": "Restaurant"}, {"name": "Thorn Tree Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "Sankara Lounge CBD", "area": "CBD", "category": "Lounge"}, {"name": "Karen Blixen Coffee Garden", "area": "Karen", "category": "Restaurant"}, {"name": "Hemingways Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Karen Country Club", "area": "Karen", "category": "Restaurant"}, {"name": "About Thyme Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Slums Cafe Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Brew Bistro Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Stedmak Gardens", "area": "Karen", "category": "Bar"}, {"name": "Tamambo Karen Blixen", "area": "Karen", "category": "Restaurant"}, {"name": "Galleria Mall Cafe", "area": "Lang'ata", "category": "Restaurant"}, {"name": "Wilson Airport Lounge", "area": "Lang'ata", "category": "Bar"}, {"name": "Nyama Mama Galleria", "area": "Lang'ata", "category": "Restaurant"}, {"name": "Lang'ata Pub", "area": "Lang'ata", "category": "Bar"}, {"name": "Carnivore Annex", "area": "Lang'ata", "category": "Restaurant"}, {"name": "Crowne Plaza Bar", "area": "Upper Hill", "category": "Bar"}, {"name": "Movenpick Hotel Bar", "area": "Upper Hill", "category": "Bar"}, {"name": "Best Western Bar", "area": "Upper Hill", "category": "Bar"}, {"name": "Boma Hotel Lounge", "area": "Upper Hill", "category": "Lounge"}, {"name": "Java House Hurlingham", "area": "Hurlingham", "category": "Restaurant"}, {"name": "Yaya Centre Cafe", "area": "Hurlingham", "category": "Restaurant"}, {"name": "Argwings Lounge", "area": "Hurlingham", "category": "Lounge"}, {"name": "Plan B Hurlingham", "area": "Hurlingham", "category": "Bar"}, {"name": "Hurlingham Pub", "area": "Hurlingham", "category": "Bar"}, {"name": "Parklands Sports Club", "area": "Parklands", "category": "Bar"}, {"name": "Java House Parklands", "area": "Parklands", "category": "Restaurant"}, {"name": "Mediterraneo Parklands", "area": "Parklands", "category": "Restaurant"}, {"name": "Aksum Eritrean", "area": "Parklands", "category": "Restaurant"}, {"name": "Diamond Plaza Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "Parklands Tavern", "area": "Parklands", "category": "Bar"}, {"name": "Java Galleria Kileleshwa", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Score Pub Kileleshwa", "area": "Kileleshwa", "category": "Bar"}, {"name": "Cosmopolitan Cafe", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Pallet Cafe Kileleshwa", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Bishop Magua Bar", "area": "Kileleshwa", "category": "Bar"}, {"name": "Ngong Hills Hotel", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Brunchitos", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Adams Arcade Pub", "area": "Ngong Road", "category": "Bar"}, {"name": "Ngong Road Tavern", "area": "Ngong Road", "category": "Bar"}, {"name": "Lazy Dog Cafe", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Donholm Pub", "area": "Donholm", "category": "Bar"}, {"name": "East Park Cafe", "area": "Donholm", "category": "Restaurant"}, {"name": "Maamake Lounge", "area": "Donholm", "category": "Lounge"}, {"name": "Eastleigh Mall Cafe", "area": "Eastleigh", "category": "Restaurant"}, {"name": "Aksum Restaurant", "area": "Eastleigh", "category": "Restaurant"}, {"name": "Eastleigh Plaza Pub", "area": "Eastleigh", "category": "Bar"}, {"name": "Kasarani Sports Cafe", "area": "Kasarani", "category": "Restaurant"}, {"name": "Mountain Mall Cafe", "area": "Kasarani", "category": "Restaurant"}, {"name": "Kasarani Lounge", "area": "Kasarani", "category": "Lounge"}, {"name": "Muthaiga Country Club", "area": "Muthaiga", "category": "Restaurant"}, {"name": "Muthaiga Mall Cafe", "area": "Muthaiga", "category": "Restaurant"}, {"name": "Tamarind Muthaiga", "area": "Muthaiga", "category": "Restaurant"}, {"name": "Village Market Cafe", "area": "Runda", "category": "Restaurant"}, {"name": "Runda Mall Restaurant", "area": "Runda", "category": "Restaurant"}, {"name": "Mediterraneo Village Market", "area": "Runda", "category": "Restaurant"}, {"name": "South B Tavern", "area": "South B", "category": "Bar"}, {"name": "South C Pub", "area": "South C", "category": "Bar"}, {"name": "Capital Centre Cafe", "area": "South C", "category": "Restaurant"}, {"name": "Mater Hospital Cafe", "area": "South B", "category": "Restaurant"}, {"name": "Mama Oliech Restaurant", "area": "Hurlingham", "category": "Restaurant"}, {"name": "Fairmont Norfolk Bar", "area": "CBD", "category": "Bar"}, {"name": "Movida Lounge", "area": "Westlands", "category": "Nightclub"}, {"name": "Kibanda Tausi", "area": "Westlands", "category": "Restaurant"}, {"name": "Brew Bistro Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Manhattan Restaurant", "area": "Westlands", "category": "Restaurant"}, {"name": "The Grange", "area": "Westlands", "category": "Restaurant"}, {"name": "Inferno Lounge", "area": "Westlands", "category": "Nightclub"}, {"name": "Galaxy Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Mojito Lounge", "area": "Westlands", "category": "Lounge"}, {"name": "Naked Pizza", "area": "Westlands", "category": "Restaurant"}, {"name": "Pizzeria Sapore", "area": "Westlands", "category": "Restaurant"}, {"name": "Open House Indian", "area": "Westlands", "category": "Restaurant"}, {"name": "Haandi Restaurant", "area": "Westlands", "category": "Restaurant"}, {"name": "Diamond Plaza Bar", "area": "Westlands", "category": "Bar"}, {"name": "Chowpaty Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Clay Oven", "area": "Westlands", "category": "Restaurant"}, {"name": "Mamtaz Restaurant", "area": "Westlands", "category": "Restaurant"}, {"name": "Caraque Cocina", "area": "Westlands", "category": "Restaurant"}, {"name": "Zen Garden", "area": "Westlands", "category": "Restaurant"}, {"name": "Tin Roof Cafe Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Spur Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "About Thyme Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Bolton Whisky & Cigar Bar", "area": "Westlands", "category": "Bar"}, {"name": "Ranalo Foods (K'osewe)", "area": "Kilimani", "category": "Restaurant"}, {"name": "The Cape", "area": "Kilimani", "category": "Restaurant"}, {"name": "Highline Lounge", "area": "Kilimani", "category": "Lounge"}, {"name": "Hashtag Lounge", "area": "Kilimani", "category": "Lounge"}, {"name": "Liquid Lounge", "area": "Kilimani", "category": "Lounge"}, {"name": "Nyama Mama Adlife Plaza", "area": "Kilimani", "category": "Restaurant"}, {"name": "Yummy Restaurant", "area": "Kilimani", "category": "Restaurant"}, {"name": "Caribbean Spice", "area": "Kilimani", "category": "Restaurant"}, {"name": "Charlie's Bistro", "area": "Kilimani", "category": "Restaurant"}, {"name": "Kimchi Restaurant", "area": "Kilimani", "category": "Restaurant"}, {"name": "Cinnabon Yaya", "area": "Kilimani", "category": "Restaurant"}, {"name": "Stone Trough Pub", "area": "Kilimani", "category": "Bar"}, {"name": "The Place Kilimani", "area": "Kilimani", "category": "Lounge"}, {"name": "Adlife Plaza Cafe", "area": "Kilimani", "category": "Restaurant"}, {"name": "Steers Yaya", "area": "Kilimani", "category": "Restaurant"}, {"name": "New Stanley Bar", "area": "CBD", "category": "Bar"}, {"name": "Pasara Cafe Hilton", "area": "CBD", "category": "Restaurant"}, {"name": "The Mod Bar", "area": "CBD", "category": "Bar"}, {"name": "Java House Imenti", "area": "CBD", "category": "Restaurant"}, {"name": "Java Lillian Towers", "area": "CBD", "category": "Restaurant"}, {"name": "Java GTC", "area": "CBD", "category": "Restaurant"}, {"name": "Nairobi Club", "area": "CBD", "category": "Restaurant"}, {"name": "Lord Delamere Terrace", "area": "CBD", "category": "Restaurant"}, {"name": "Capital Club CBD", "area": "CBD", "category": "Lounge"}, {"name": "Nation Centre Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "Anniversary Towers Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "Barclays Plaza Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "Norfolk Hotel Bar", "area": "CBD", "category": "Bar"}, {"name": "View Park Towers Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "ICEA Building Cafe", "area": "CBD", "category": "Restaurant"}, {"name": "Tin Roof Karen", "area": "Karen", "category": "Restaurant"}, {"name": "The Spur Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Ole Sereni Hotel", "area": "Karen", "category": "Restaurant"}, {"name": "Saadia Restaurant", "area": "Karen", "category": "Restaurant"}, {"name": "Ndalat Ngogo", "area": "Karen", "category": "Restaurant"}, {"name": "Karen Plaza", "area": "Karen", "category": "Restaurant"}, {"name": "Cinema 1996", "area": "Karen", "category": "Restaurant"}, {"name": "Karen Provision Store", "area": "Karen", "category": "Restaurant"}, {"name": "Mahali Mzuri Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Nyama Mama Karen", "area": "Karen", "category": "Restaurant"}, {"name": "Boma Lounge Karen", "area": "Karen", "category": "Lounge"}, {"name": "Galleria Mall Pub", "area": "Lang'ata", "category": "Bar"}, {"name": "Lang'ata Cafe Plaza", "area": "Lang'ata", "category": "Restaurant"}, {"name": "Wilson Pub", "area": "Lang'ata", "category": "Bar"}, {"name": "Magadi Road Pub", "area": "Lang'ata", "category": "Bar"}, {"name": "Open House Parklands", "area": "Parklands", "category": "Restaurant"}, {"name": "Salt Restaurant", "area": "Parklands", "category": "Restaurant"}, {"name": "Mediterraneo Parklands Annex", "area": "Parklands", "category": "Restaurant"}, {"name": "Diamond Plaza Indian", "area": "Parklands", "category": "Restaurant"}, {"name": "Highridge Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "Westgate Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "Limuru Road Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "Parklands Plaza Pub", "area": "Parklands", "category": "Bar"}, {"name": "Aga Khan Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "City Park Cafe", "area": "Parklands", "category": "Restaurant"}, {"name": "Trident Bar", "area": "Kileleshwa", "category": "Bar"}, {"name": "Score Annex", "area": "Kileleshwa", "category": "Lounge"}, {"name": "Black Diamond", "area": "Kileleshwa", "category": "Lounge"}, {"name": "Ridgeways Cafe", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Kileleshwa Mall Cafe", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Cosmo Kileleshwa", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Bishop Magua Restaurant", "area": "Kileleshwa", "category": "Restaurant"}, {"name": "Kileleshwa Tavern", "area": "Kileleshwa", "category": "Bar"}, {"name": "Kileleshwa Lounge", "area": "Kileleshwa", "category": "Lounge"}, {"name": "Kindaruma Pub", "area": "Kileleshwa", "category": "Bar"}, {"name": "Lavington Mall Pub", "area": "Lavington", "category": "Bar"}, {"name": "Mawingu Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Bistro Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "The Cape Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "Pallet Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "Cinnabon Lavington", "area": "Lavington", "category": "Restaurant"}, {"name": "Lord Erroll Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Kindaruma Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Valley Arcade Pub", "area": "Lavington", "category": "Bar"}, {"name": "Lavington Curve Cafe", "area": "Lavington", "category": "Restaurant"}, {"name": "Lazy Dog Cafe Ngong", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Rusty Truck Cafe", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Ngong Hills Cafe", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Brew Bistro Ngong", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Pizza Inn Ngong", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Junction Mall Cafe", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Junction Mall Pub", "area": "Ngong Road", "category": "Bar"}, {"name": "Galleria Junction", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Ngong Lounge", "area": "Ngong Road", "category": "Lounge"}, {"name": "Ngong Steakhouse", "area": "Ngong Road", "category": "Restaurant"}, {"name": "Embakasi Mall Cafe", "area": "Embakasi", "category": "Restaurant"}, {"name": "Pipeline Cafe", "area": "Pipeline", "category": "Restaurant"}, {"name": "Tassia Pub", "area": "Embakasi", "category": "Bar"}, {"name": "Tena Pub", "area": "Embakasi", "category": "Bar"}, {"name": "Greenfields Pub", "area": "Embakasi", "category": "Bar"}, {"name": "Buruburu Cafe", "area": "Buruburu", "category": "Restaurant"}, {"name": "Outer Ring Cafe", "area": "Buruburu", "category": "Restaurant"}, {"name": "Kayole Pub", "area": "Kayole", "category": "Bar"}, {"name": "Komarock Lounge", "area": "Komarock", "category": "Lounge"}, {"name": "Donholm Pub Annex", "area": "Donholm", "category": "Bar"}, {"name": "Mountain Mall Pub", "area": "Kasarani", "category": "Bar"}, {"name": "Kasarani Stadium Cafe", "area": "Kasarani", "category": "Restaurant"}, {"name": "Roysambu Lounge", "area": "Roysambu", "category": "Lounge"}, {"name": "TRM Pub", "area": "Thika Road", "category": "Bar"}, {"name": "TRM Cafe", "area": "Thika Road", "category": "Restaurant"}, {"name": "Garden City Cafe", "area": "Thika Road", "category": "Restaurant"}, {"name": "Garden City Pub", "area": "Thika Road", "category": "Bar"}, {"name": "Two Rivers Cafe", "area": "Runda", "category": "Restaurant"}, {"name": "Kahawa Sukari Cafe", "area": "Kahawa", "category": "Restaurant"}, {"name": "Kahawa West Pub", "area": "Kahawa", "category": "Bar"}, {"name": "Tribe Hotel Bar", "area": "Muthaiga", "category": "Bar"}, {"name": "Tribe Sky Bar", "area": "Muthaiga", "category": "Lounge"}, {"name": "Karura Forest Cafe", "area": "Muthaiga", "category": "Restaurant"}, {"name": "Village Market Pub", "area": "Runda", "category": "Bar"}, {"name": "Tamambo Village Market", "area": "Runda", "category": "Restaurant"}, {"name": "Kasuku Centre Cafe", "area": "Kasuku", "category": "Restaurant"}, {"name": "Limuru Country Club", "area": "Limuru", "category": "Restaurant"}, {"name": "Brookhouse Lounge", "area": "Runda", "category": "Lounge"}, {"name": "Crowne Plaza Annex", "area": "Upper Hill", "category": "Restaurant"}, {"name": "Boma Hotel Restaurant", "area": "Upper Hill", "category": "Restaurant"}, {"name": "Hilton Upper Hill", "area": "Upper Hill", "category": "Bar"}, {"name": "Best Western Annex", "area": "Upper Hill", "category": "Restaurant"}, {"name": "Plan B Annex", "area": "Hurlingham", "category": "Bar"}, {"name": "Yaya Centre Pub", "area": "Hurlingham", "category": "Bar"}, {"name": "Hurlingham Mall Cafe", "area": "Hurlingham", "category": "Restaurant"}, {"name": "Argwings Lounge Annex", "area": "Hurlingham", "category": "Lounge"}, {"name": "Adlife Plaza Pub", "area": "Upper Hill", "category": "Bar"}, {"name": "Lower Kabete Pub", "area": "Lower Kabete", "category": "Bar"}, {"name": "Riverside Drive Cafe", "area": "Riverside", "category": "Restaurant"}, {"name": "Spring Valley Cafe", "area": "Spring Valley", "category": "Restaurant"}, {"name": "Nyari Lounge", "area": "Nyari", "category": "Lounge"}, {"name": "Kitisuru Cafe", "area": "Kitisuru", "category": "Restaurant"}, {"name": "Ngara Pub", "area": "Ngara", "category": "Bar"}, {"name": "Madaraka Pub", "area": "Madaraka", "category": "Bar"}, {"name": "Pangani Pub", "area": "Pangani", "category": "Bar"}, {"name": "Highridge Pub", "area": "Highridge", "category": "Bar"}, {"name": "Hardy Cafe", "area": "Hardy", "category": "Restaurant"}, {"name": "Ongata Rongai Pub", "area": "Ongata Rongai", "category": "Bar"}, {"name": "Tuk Tuk Vegan", "area": "Westlands", "category": "Restaurant"}, {"name": "Pasara Cafe Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "About Thyme Annex", "area": "Karen", "category": "Restaurant"}, {"name": "Tamambo Annex", "area": "Karen", "category": "Restaurant"}, {"name": "Tamarind Tree", "area": "Westlands", "category": "Restaurant"}, {"name": "Mahali Mzuri Westlands", "area": "Westlands", "category": "Restaurant"}, {"name": "Hidden Garden", "area": "Karen", "category": "Restaurant"}];
+
+// State
+const state = {
+  step: 1,
+  venue: null,         // {name, area, category} from autocomplete
+  newVenue: null,      // {name, area, category} from add-new path
+  verify: '',
+  whatsapp: '',
+  ranks: { comp: '', promo: '', profile: '', reservations: '' },
+  email: '',
+  optIn: true,
+};
+
+// ---------- Step navigation ----------
+function showStep(n) {
+  state.step = n;
+  ['1', '2', '3', 'done'].forEach(id => {
+    const el = document.getElementById('step-' + id);
+    if (el) el.hidden = true;
+  });
+  const target = n === 'done' ? document.getElementById('step-done') : document.getElementById('step-' + n);
+  if (target) target.hidden = false;
+  // Update progress
+  document.querySelectorAll('.progress-step').forEach(p => {
+    const ps = parseInt(p.dataset.step, 10);
+    p.classList.toggle('active', ps === n);
+    p.classList.toggle('done', n === 'done' || ps < n);
+  });
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ---------- Step 1: Autocomplete + add-new ----------
+const searchInput = document.getElementById('venue-search');
+const acList = document.getElementById('ac-list');
+const selectedVenueEl = document.getElementById('selected-venue');
+const newFields = document.getElementById('new-venue-fields');
+
+// Populate area datalist for "add new" input
+const areas = [...new Set(VENUES.map(v => v.area))].sort();
+const areasDl = document.getElementById('known-areas');
+areas.forEach(a => {
+  const opt = document.createElement('option');
+  opt.value = a;
+  areasDl.appendChild(opt);
+});
+
+function renderAcList(query) {
+  if (!query || query.length < 2) { acList.classList.remove('show'); return; }
+  const q = query.toLowerCase();
+  const matches = VENUES.filter(v => v.name.toLowerCase().includes(q)).slice(0, 8);
+  if (matches.length === 0) {
+    acList.innerHTML = '<div class="ac-empty">No matches. Use "Add it →" below.</div>';
+    acList.classList.add('show');
+    return;
+  }
+  acList.innerHTML = matches.map((v, i) => `
+    <div class="ac-item" data-idx="${i}" role="option">
+      ${escapeHtml(v.name)}<span class="ac-item-meta">${escapeHtml(v.category || 'Venue')} · ${escapeHtml(v.area)}</span>
+    </div>
+  `).join('');
+  acList.classList.add('show');
+  acList.querySelectorAll('.ac-item').forEach((el, i) => {
+    el.addEventListener('click', () => selectVenue(matches[i]));
+  });
+}
+
+function selectVenue(v) {
+  state.venue = v;
+  state.newVenue = null;
+  searchInput.value = '';
+  acList.classList.remove('show');
+  selectedVenueEl.hidden = false;
+  newFields.hidden = true;
+  document.getElementById('sv-name').textContent = v.name;
+  document.getElementById('sv-meta').textContent = `${v.category || 'Venue'} · ${v.area}`;
+  hideError('err-venue');
+}
+
+function clearVenue() {
+  state.venue = null;
+  selectedVenueEl.hidden = true;
+  searchInput.focus();
+}
+
+searchInput.addEventListener('input', e => renderAcList(e.target.value));
+document.getElementById('sv-clear').addEventListener('click', clearVenue);
+document.getElementById('add-new-btn').addEventListener('click', () => {
+  state.venue = null;
+  selectedVenueEl.hidden = true;
+  newFields.hidden = false;
+  searchInput.value = '';
+  acList.classList.remove('show');
+  document.getElementById('new-name').focus();
+});
+// Close autocomplete on outside click
+document.addEventListener('click', e => {
+  if (!e.target.closest('.ac-wrap')) acList.classList.remove('show');
+});
+
+// ---------- Step navigation handlers ----------
+document.getElementById('next-1').addEventListener('click', () => {
+  // Validate venue selection
+  if (state.venue) { showStep(2); return; }
+  // Else check add-new path
+  const newName = document.getElementById('new-name').value.trim();
+  const newArea = document.getElementById('new-area').value.trim();
+  const newCat = document.getElementById('new-category').value;
+  if (!newFields.hidden && newName && newArea) {
+    state.newVenue = { name: newName, area: newArea, category: newCat };
+    showStep(2);
+    return;
+  }
+  showError('err-venue');
+});
+
+document.getElementById('back-2').addEventListener('click', () => showStep(1));
+document.getElementById('next-2').addEventListener('click', () => {
+  const verify = document.querySelector('input[name="verify"]:checked');
+  const whatsapp = document.getElementById('whatsapp').value.trim();
+  let ok = true;
+  if (!verify) { showError('err-verify'); ok = false; } else hideError('err-verify');
+  if (!whatsapp || whatsapp.length < 7) { showError('err-whatsapp'); ok = false; } else hideError('err-whatsapp');
+  if (!ok) return;
+  state.verify = verify.value;
+  state.whatsapp = whatsapp;
+  showStep(3);
+});
+
+document.getElementById('back-3').addEventListener('click', () => showStep(2));
+document.getElementById('submit-btn').addEventListener('click', () => {
+  // Collect ranks
+  const rows = document.querySelectorAll('.rank-row');
+  const ranks = {};
+  rows.forEach(r => {
+    ranks[r.dataset.id] = r.querySelector('select').value;
+  });
+  const values = Object.values(ranks);
+  // Must use 1–4 each exactly once
+  const valid = values.length === 4 && new Set(values).size === 4 && values.every(v => ['1','2','3','4'].includes(v));
+  if (!valid) { showError('err-ranker'); return; }
+  hideError('err-ranker');
+  state.ranks = ranks;
+  state.email = document.getElementById('email').value.trim();
+  state.optIn = document.getElementById('opt-in').checked;
+  buildAndShowDone();
+});
+
+// ---------- Build the structured message ----------
+function buildMessage() {
+  const venue = state.venue || state.newVenue;
+  const isNew = !state.venue && state.newVenue;
+  const priorityLabels = {
+    comp: 'Foot-traffic vs comp set',
+    promo: 'Push promotions on slow nights',
+    profile: 'Customize venue profile',
+    reservations: 'Reservation enquiries',
+  };
+  const ranked = Object.entries(state.ranks)
+    .map(([k, v]) => ({ k, v: parseInt(v, 10) }))
+    .sort((a, b) => a.v - b.v)
+    .map(r => `${r.v}. ${priorityLabels[r.k]}`)
+    .join('\n');
+
+  return [
+    '📍 NVI VENUE CLAIM',
+    '',
+    `Venue: ${venue.name}${isNew ? ' (NEW)' : ''}`,
+    `Area: ${venue.area}`,
+    `Category: ${venue.category || 'Venue'}`,
+    '',
+    'Verification:',
+    `  Method: ${state.verify}`,
+    `  WhatsApp: ${state.whatsapp}`,
+    '',
+    'Priorities (1 = most important):',
+    ranked,
+    '',
+    `Email: ${state.email || '—'}`,
+    `Opt-in to updates: ${state.optIn ? 'yes' : 'no'}`,
+  ].join('\n');
+}
+
+function buildAndShowDone() {
+  const msg = buildMessage();
+  document.getElementById('message-preview').textContent = msg;
+  // Telegram share URL — opens share sheet pre-filled with text
+  const shareUrl = 'https://t.me/share/url?url=' +
+    encodeURIComponent('https://charles254.github.io/nairobi-vibe-index/') +
+    '&text=' + encodeURIComponent(msg);
+  document.getElementById('telegram-send').href = shareUrl;
+  showStep('done');
+}
+
+// ---------- Copy to clipboard ----------
+document.getElementById('copy-btn').addEventListener('click', async () => {
+  const msg = document.getElementById('message-preview').textContent;
+  try {
+    await navigator.clipboard.writeText(msg);
+    showToast('Copied — paste into Telegram, WhatsApp, or email');
+  } catch (e) {
+    // Fallback: select the text
+    const range = document.createRange();
+    range.selectNodeContents(document.getElementById('message-preview'));
+    const sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+    showToast('Selected — press Ctrl+C / Cmd+C to copy');
+  }
+});
+
+document.getElementById('restart-btn').addEventListener('click', () => {
+  // Reset state and form
+  Object.assign(state, { step: 1, venue: null, newVenue: null, verify: '', whatsapp: '', ranks: { comp: '', promo: '', profile: '', reservations: '' }, email: '', optIn: true });
+  searchInput.value = '';
+  document.getElementById('whatsapp').value = '';
+  document.getElementById('email').value = '';
+  document.querySelectorAll('input[name="verify"]').forEach(r => r.checked = false);
+  document.querySelectorAll('.rank-select').forEach(s => s.value = '');
+  document.getElementById('opt-in').checked = true;
+  document.getElementById('new-name').value = '';
+  document.getElementById('new-area').value = '';
+  selectedVenueEl.hidden = true;
+  newFields.hidden = true;
+  showStep(1);
+});
+
+// ---------- Toast ----------
+function showToast(text) {
+  const t = document.getElementById('toast');
+  t.textContent = text;
+  t.classList.add('show');
+  setTimeout(() => t.classList.remove('show'), 2400);
+}
+
+// ---------- Errors ----------
+function showError(id) {
+  const e = document.getElementById(id);
+  if (e) e.classList.add('show');
+}
+function hideError(id) {
+  const e = document.getElementById(id);
+  if (e) e.classList.remove('show');
+}
+
+// ---------- Util ----------
+function escapeHtml(s) {
+  return String(s).replace(/[&<>"']/g, c => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[c]));
+}
+</script>
+</body>
+</html>

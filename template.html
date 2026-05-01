@@ -1499,7 +1499,8 @@ if (DATA.generated_at) {
 
 // ============ BarMatch owner banner ============
 function withUtm(url, source, medium) {
-  if (!url || !/^https?:/.test(url)) return url || '#';
+  // Skip mailto:/tel:/sms: where query params don't make sense.
+  if (!url || /^(mailto|tel|sms):/.test(url)) return url || '#';
   const sep = url.includes('?') ? '&' : '?';
   return url + sep + 'utm_source=' + encodeURIComponent(source) + '&utm_medium=' + encodeURIComponent(medium);
 }
