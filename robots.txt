@@ -12,4 +12,4 @@ User-agent: PerplexityBot
 Allow: /
 
 # Sitemap location
-Sitemap: https://charles254.github.io/nairobi-vibe-index/sitemap.xml
+Sitemap: https://nairobivibe.com/sitemap.xml

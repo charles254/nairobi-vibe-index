@@ -10,10 +10,10 @@
 
 <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
 <meta property="og:type" content="website">
-<meta property="og:url" content="https://charles254.github.io/nairobi-vibe-index/">
+<meta property="og:url" content="https://nairobivibe.com/">
 <meta property="og:title" content="NVI — Nairobi Vibe Index">
 <meta property="og:description" content="Live nightlife intelligence for Nairobi. Vibe scores for the city's clubs, bars, and restaurants. The data the city is too drunk to notice.">
-<meta property="og:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+<meta property="og:image" content="https://nairobivibe.com/og-image.svg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:site_name" content="NVI">
@@ -22,7 +22,7 @@
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NVI — Nairobi Vibe Index">
 <meta name="twitter:description" content="Live nightlife intelligence for Nairobi. The data the city is too drunk to notice.">
-<meta name="twitter:image" content="https://charles254.github.io/nairobi-vibe-index/og-image.svg">
+<meta name="twitter:image" content="https://nairobivibe.com/og-image.svg">
 
 <!-- Favicon: inline SVG, no extra request -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%2307080d%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%23ff2d92%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.35em%22%20font-family%3D%22monospace%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ff2d92%22%3ENVI%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -1311,16 +1311,22 @@
       <span class="toggle-dot"></span>
       Hide closed
     </button>
+    <button class="toggle-btn active" id="hide-listed-btn" aria-pressed="true" title="Hide cards with no foot-traffic data yet">
+      <span class="toggle-dot"></span>
+      Data only
+    </button>
     <script>
-      // Reflect the JS-determined initial state on the button at first paint
+      // Reflect the JS-determined initial state on the Hide-closed button at first paint
       (function() {
         var utc = new Date();
         var eat = new Date(utc.getTime() + 3 * 3600 * 1000);
         var h = eat.getUTCHours();
         if (h >= 18 || h <= 3) {
-          var b = document.currentScript.previousElementSibling;
-          b.classList.add('active');
-          b.setAttribute('aria-pressed', 'true');
+          var b = document.getElementById('hide-closed-btn');
+          if (b) {
+            b.classList.add('active');
+            b.setAttribute('aria-pressed', 'true');
+          }
         }
       })();
     </script>
@@ -1665,17 +1671,21 @@ function renderAlcoblow() {
 
 renderAlcoblow();
 
-// ============ Filters: area + category + search + hide-closed ============
-// Default `hideClosed` ON during nightlife hours (6 PM – 3 AM Nairobi time)
-// because a user hitting NVI on a Friday at 11 PM doesn't want to see
-// closed cafes; a user hitting NVI Wednesday at 11 AM wants the full catalog.
+// ============ Filters: area + category + search + hide-closed + hide-listed ============
+// Default `hideClosed` ON during nightlife hours (6 PM – 3 AM Nairobi time).
+// Default `hideListed` ON always — most users want venues with data first;
+// they can toggle off to see the full catalog including the awaiting-data cards.
 function _initialHideClosed() {
   const utc = new Date();
   const eat = new Date(utc.getTime() + 3 * 3600 * 1000);
   const h = eat.getUTCHours();
   return h >= 18 || h <= 3;
 }
-const filters = { area: 'all', category: 'all', search: '', hideClosed: _initialHideClosed() };
+const filters = {
+  area: 'all', category: 'all', search: '',
+  hideClosed: _initialHideClosed(),
+  hideListed: true,
+};
 
 function renderFilterStrip() {
   const areaCounts = {};
@@ -1718,7 +1728,8 @@ function applyFilters() {
     const catOk    = filters.category === 'all' || card.dataset.category === filters.category;
     const searchOk = !filters.search || (card.dataset.name || '').includes(filters.search);
     const closedOk = !filters.hideClosed || !card.classList.contains('closed');
-    const ok = areaOk && catOk && searchOk && closedOk;
+    const listedOk = !filters.hideListed || card.dataset.listed !== '1';
+    const ok = areaOk && catOk && searchOk && closedOk && listedOk;
     card.classList.toggle('hidden', !ok);
     if (ok) visible++;
   });
@@ -1754,6 +1765,14 @@ hideClosedBtn.addEventListener('click', () => {
   filters.hideClosed = !filters.hideClosed;
   hideClosedBtn.classList.toggle('active', filters.hideClosed);
   hideClosedBtn.setAttribute('aria-pressed', String(filters.hideClosed));
+  applyFilters();
+});
+
+const hideListedBtn = document.getElementById('hide-listed-btn');
+hideListedBtn.addEventListener('click', () => {
+  filters.hideListed = !filters.hideListed;
+  hideListedBtn.classList.toggle('active', filters.hideListed);
+  hideListedBtn.setAttribute('aria-pressed', String(filters.hideListed));
   applyFilters();
 });
 
