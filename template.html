@@ -381,6 +381,45 @@
     line-height: 1.55;
   }
 
+  /* ============ Badge legend ============ */
+  .legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.25rem;
+    margin-bottom: 1.5rem;
+    padding: 0.875rem 1.25rem;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.6875rem;
+    color: var(--text-dim);
+    align-items: center;
+  }
+  .legend-label {
+    font-weight: 700;
+    color: var(--text-faint);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    margin-right: 0.5rem;
+  }
+  .legend-item { display: inline-flex; align-items: center; gap: 0.4rem; }
+  .legend-swatch {
+    display: inline-block;
+    padding: 0.18rem 0.45rem;
+    border: 1px solid;
+    border-radius: 4px;
+    font-size: 0.625rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+  }
+  .legend-swatch.peak  { color: var(--red);    border-color: var(--red); }
+  .legend-swatch.high  { color: var(--orange); border-color: var(--orange); }
+  .legend-swatch.mod   { color: var(--yellow); border-color: var(--yellow); }
+  .legend-swatch.build { color: var(--green);  border-color: var(--green); }
+  .legend-swatch.low   { color: var(--cyan);   border-color: var(--cyan); }
+  .legend-swatch.peaks { color: white; background: var(--magenta); border-color: var(--magenta); }
+
   /* ============ Per-area "right now" rollup ============ */
   .area-rollup {
     display: flex;
@@ -1272,7 +1311,30 @@
       <span class="toggle-dot"></span>
       Hide closed
     </button>
+    <script>
+      // Reflect the JS-determined initial state on the button at first paint
+      (function() {
+        var utc = new Date();
+        var eat = new Date(utc.getTime() + 3 * 3600 * 1000);
+        var h = eat.getUTCHours();
+        if (h >= 18 || h <= 3) {
+          var b = document.currentScript.previousElementSibling;
+          b.classList.add('active');
+          b.setAttribute('aria-pressed', 'true');
+        }
+      })();
+    </script>
     <span class="results-count" id="results-count"></span>
+  </div>
+
+  <div class="legend">
+    <span class="legend-label">Badges:</span>
+    <span class="legend-item"><span class="legend-swatch peaks">★ Peaks now</span> currently at this venue's weekly maximum</span>
+    <span class="legend-item"><span class="legend-swatch peak">▲ Peak</span> ≥80% of capacity</span>
+    <span class="legend-item"><span class="legend-swatch high">▲ High</span> ≥60%</span>
+    <span class="legend-item"><span class="legend-swatch mod">▶ Mod</span> ≥40%</span>
+    <span class="legend-item"><span class="legend-swatch build">▲ Building</span> ≥20%</span>
+    <span class="legend-item"><span class="legend-swatch low">▽ Low</span> &gt;0%</span>
   </div>
 
   <div class="grid" id="grid"></div>
@@ -1604,7 +1666,16 @@ function renderAlcoblow() {
 renderAlcoblow();
 
 // ============ Filters: area + category + search + hide-closed ============
-const filters = { area: 'all', category: 'all', search: '', hideClosed: false };
+// Default `hideClosed` ON during nightlife hours (6 PM – 3 AM Nairobi time)
+// because a user hitting NVI on a Friday at 11 PM doesn't want to see
+// closed cafes; a user hitting NVI Wednesday at 11 AM wants the full catalog.
+function _initialHideClosed() {
+  const utc = new Date();
+  const eat = new Date(utc.getTime() + 3 * 3600 * 1000);
+  const h = eat.getUTCHours();
+  return h >= 18 || h <= 3;
+}
+const filters = { area: 'all', category: 'all', search: '', hideClosed: _initialHideClosed() };
 
 function renderFilterStrip() {
   const areaCounts = {};
