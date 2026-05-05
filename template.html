@@ -7,22 +7,56 @@
 <meta name="description" content="Live nightlife intelligence for Nairobi. Foot-traffic forecasts for the city's clubs, bars, and restaurants. The data the city is too drunk to notice.">
 <meta name="theme-color" content="#07080d">
 <meta name="author" content="NVI">
+<link rel="canonical" href="https://nairobivibe.com/">
 
 <!-- Open Graph / Facebook / WhatsApp / LinkedIn -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://nairobivibe.com/">
 <meta property="og:title" content="NVI — Nairobi Vibe Index">
 <meta property="og:description" content="Live nightlife intelligence for Nairobi. Vibe scores for the city's clubs, bars, and restaurants. The data the city is too drunk to notice.">
-<meta property="og:image" content="https://nairobivibe.com/og-image.svg">
+<meta property="og:image" content="https://nairobivibe.com/og-image.png">
+<meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="NVI — Nairobi Vibe Index. Live nightlife intelligence for Nairobi.">
 <meta property="og:site_name" content="NVI">
+<meta property="og:locale" content="en_KE">
 
 <!-- Twitter / X -->
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="NVI — Nairobi Vibe Index">
 <meta name="twitter:description" content="Live nightlife intelligence for Nairobi. The data the city is too drunk to notice.">
-<meta name="twitter:image" content="https://nairobivibe.com/og-image.svg">
+<meta name="twitter:image" content="https://nairobivibe.com/og-image.png">
+<meta name="twitter:image:alt" content="NVI — Nairobi Vibe Index. Live nightlife intelligence for Nairobi.">
+
+<!-- Structured data: Organization + WebSite (with sitelinks search) -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://nairobivibe.com/#org",
+      "name": "NVI — Nairobi Vibe Index",
+      "url": "https://nairobivibe.com/",
+      "logo": "https://nairobivibe.com/og-image.png",
+      "description": "Live nightlife intelligence for Nairobi — foot-traffic forecasts for the city's clubs, bars, and restaurants.",
+      "sameAs": [
+        "https://t.me/nvi_reports",
+        "https://github.com/charles254/nairobi-vibe-index"
+      ]
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://nairobivibe.com/#website",
+      "url": "https://nairobivibe.com/",
+      "name": "Nairobi Vibe Index",
+      "publisher": { "@id": "https://nairobivibe.com/#org" },
+      "inLanguage": "en"
+    }
+  ]
+}
+</script>
 
 <!-- Favicon: inline SVG, no extra request -->
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%2212%22%20fill%3D%22%2307080d%22%2F%3E%3Crect%20x%3D%221.5%22%20y%3D%221.5%22%20width%3D%2261%22%20height%3D%2261%22%20rx%3D%2210.5%22%20fill%3D%22none%22%20stroke%3D%22%23ff2d92%22%20stroke-width%3D%223%22%2F%3E%3Ctext%20x%3D%2250%25%22%20y%3D%2250%25%22%20text-anchor%3D%22middle%22%20dy%3D%22.35em%22%20font-family%3D%22monospace%22%20font-size%3D%2222%22%20font-weight%3D%22900%22%20fill%3D%22%23ff2d92%22%3ENVI%3C%2Ftext%3E%3C%2Fsvg%3E">
@@ -1224,7 +1258,7 @@
     </div>
   </div>
 
-  <a class="barmatch-banner" id="barmatch-banner" href="#" hidden>
+  <a class="barmatch-banner" id="barmatch-banner" href="claim.html">
     <div class="barmatch-banner-text">
       <div class="barmatch-banner-eyebrow">For venue owners</div>
       <div class="barmatch-banner-headline">Own one of the 287 venues we track?</div>
@@ -1549,7 +1583,7 @@ function renderCard(venue, dayInt, hour) {
         <span>12a</span><span>6a</span><span>12p</span><span>6p</span><span>12a</span>
       </div>
       <div class="card-actions">
-        <a class="card-action claim" href="${escapeHtml(withUtm(DATA.barmatch_url || '#', 'nvi', 'card-claim'))}" title="Are you the owner? Claim this venue.">Own this? Claim</a>
+        <a class="card-action claim" href="${escapeHtml(withUtm(DATA.barmatch_url || 'claim.html', 'nvi', 'card-claim'))}" title="Are you the owner? Claim this venue.">Own this? Claim</a>
         <a class="card-action bolt" href="${escapeHtml(DATA.bolt_url || '#')}" target="_blank" rel="noopener" title="Don't drink &amp; drive — book a Bolt">🚖 Bolt</a>
         <a class="card-action uber" href="${escapeHtml(DATA.uber_url || '#')}" target="_blank" rel="noopener" title="Don't drink &amp; drive — book an Uber">🚖 Uber</a>
       </div>
@@ -1628,9 +1662,9 @@ function withUtm(url, source, medium) {
   return url + sep + 'utm_source=' + encodeURIComponent(source) + '&utm_medium=' + encodeURIComponent(medium);
 }
 if (DATA.barmatch_url) {
+  // Override the static claim.html fallback when an external BarMatch URL is configured
   const bm = document.getElementById('barmatch-banner');
   bm.href = withUtm(DATA.barmatch_url, 'nvi', 'banner');
-  bm.hidden = false;
 }
 
 // ============ NVI Signals panel ============
