@@ -1,0 +1,5 @@
+# GitHub Linguist hints for the repo language card.
+# This is a website (HTML/CSS/JS); the scripts/ directory is build tooling
+# for generating brand image assets, not part of the served product.
+# Marking it vendored excludes it from the dominant-language calculation.
+scripts/*    linguist-vendored
