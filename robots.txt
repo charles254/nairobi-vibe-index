@@ -1,0 +1,15 @@
+User-agent: *
+Allow: /
+
+# AI scrapers — explicit allow (this dashboard wants to be cited)
+User-agent: GPTBot
+Allow: /
+
+User-agent: ClaudeBot
+Allow: /
+
+User-agent: PerplexityBot
+Allow: /
+
+# Sitemap location
+Sitemap: https://charles254.github.io/nairobi-vibe-index/sitemap.xml
