@@ -200,6 +200,41 @@ def build_cover() -> None:
     print(f"Wrote {out}  ({out.stat().st_size:,} bytes)")
 
 
+def build_x_header() -> None:
+    """X / Twitter header (1500x500, 3:1).
+
+    Different from FB cover — wider, shorter. X also overlays the
+    profile circle in the bottom-left, so keep that area clear.
+    """
+    W, H = 1500, 500
+    img = vertical_gradient((W, H), [(0.0, BG_TOP), (0.5, BG_MID), (1.0, BG_BOT)])
+    img = img.convert("RGBA")
+    img = Image.alpha_composite(img, radial_glow((W, H), (300, 0), 700, MAGENTA, 100))
+    img = Image.alpha_composite(img, radial_glow((W, H), (W, H), 700, CYAN, 70))
+    d = ImageDraw.Draw(img)
+
+    # Brand line top-left (out of profile-circle overlay zone)
+    d.ellipse([60, 50, 80, 70], fill=MAGENTA)
+    d.text((96, 46), "NVI . NAIROBI VIBE INDEX",
+           font=font("mono", 22), fill=MAGENTA)
+
+    # Big bold NVI text — right-of-center so the profile circle doesn't cover it
+    f_logo = font("mono", 220)
+    d.text((900, H // 2), "NVI", font=f_logo, fill=MAGENTA, anchor="mm")
+
+    # Tagline + URL stacked under the logo (right side)
+    d.text((900, 380), "The data the city is too drunk to notice.",
+           font=font("sans", 28), fill=TEXT, anchor="mt")
+    d.text((900, 425), "nairobivibe.com",
+           font=font("mono", 26), fill=CYAN, anchor="mt")
+
+    out = WEB_DIR / "social" / "x-header-1500x500.png"
+    out.parent.mkdir(parents=True, exist_ok=True)
+    img.convert("RGB").save(out, "PNG", optimize=True)
+    print(f"Wrote {out}  ({out.stat().st_size:,} bytes)")
+
+
 if __name__ == "__main__":
     build_profile()
     build_cover()
+    build_x_header()

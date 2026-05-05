@@ -21,6 +21,8 @@
 <meta property="og:locale" content="en_KE">
 
 <meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:site" content="@nairobivibeke">
+<meta name="twitter:creator" content="@nairobivibeke">
 <meta name="twitter:title" content="About NVI — Methodology &amp; Mission">
 <meta name="twitter:description" content="How the Nairobi Vibe Index is built. The data, the score, and why we made it.">
 <meta name="twitter:image" content="https://nairobivibe.com/og-image.png">
@@ -181,6 +183,28 @@
     font-size: 0.75rem;
     text-align: center;
   }
+  .social-links {
+    display: flex;
+    gap: 0.875rem;
+    justify-content: center;
+    margin: 1.5rem 0 0.5rem;
+  }
+  .social-links a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    color: var(--text-dim);
+    transition: color 0.15s, border-color 0.15s, background 0.15s;
+  }
+  .social-links a:hover {
+    color: var(--magenta);
+    border-color: var(--magenta);
+    background: rgba(255, 45, 146, 0.08);
+  }
 </style>
 </head>
 <body>
@@ -278,6 +302,17 @@
   <h2>Contact</h2>
   <p>Found a bug? Want a venue added? Open an <a href="https://github.com/charles254/nairobi-vibe-index/issues" target="_blank" rel="noopener">issue on GitHub</a>.</p>
 
+  <nav class="social-links" aria-label="NVI on social media">
+    <a href="https://www.facebook.com/profile.php?id=61589325599622" target="_blank" rel="noopener" title="NVI on Facebook" aria-label="Facebook">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c5.05-.5 9-4.76 9-9.95z"/></svg>
+    </a>
+    <a href="https://www.instagram.com/nairobivibe" target="_blank" rel="noopener" title="NVI on Instagram" aria-label="Instagram">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2.16c3.2 0 3.58 0 4.85.07 3.25.15 4.77 1.69 4.92 4.92.06 1.27.07 1.65.07 4.85s0 3.58-.07 4.85c-.15 3.23-1.66 4.77-4.92 4.92-1.27.06-1.65.07-4.85.07s-3.58 0-4.85-.07c-3.26-.15-4.77-1.69-4.92-4.92C2.18 15.58 2.16 15.2 2.16 12s0-3.58.07-4.85C2.38 3.92 3.9 2.38 7.15 2.23 8.42 2.18 8.8 2.16 12 2.16zM12 0C8.74 0 8.33.01 7.05.07c-4.36.2-6.78 2.62-6.98 6.98C0 8.33 0 8.74 0 12s.01 3.67.07 4.95c.2 4.36 2.62 6.78 6.98 6.98C8.33 23.99 8.74 24 12 24s3.67-.01 4.95-.07c4.35-.2 6.78-2.62 6.98-6.98.06-1.28.07-1.69.07-4.95s-.01-3.67-.07-4.95c-.2-4.35-2.62-6.78-6.98-6.98C15.67.01 15.26 0 12 0zm0 5.84a6.16 6.16 0 100 12.32 6.16 6.16 0 000-12.32zM12 16a4 4 0 110-8 4 4 0 010 8zm6.41-11.85a1.44 1.44 0 100 2.88 1.44 1.44 0 000-2.88z"/></svg>
+    </a>
+    <a href="https://x.com/nairobivibeke" target="_blank" rel="noopener" title="NVI on X" aria-label="X">
+      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.45-6.231zm-1.161 17.52h1.833L7.084 4.126H5.117l11.966 15.644z"/></svg>
+    </a>
+  </nav>
   <footer>NVI — Nairobi Vibe Index · Made in Nairobi · Forecast data, not real-time. Drink responsibly.</footer>
 </div>
 </body>
