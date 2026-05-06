@@ -1,6 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<!-- Google tag (gtag.js) -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-D7147L42EQ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-D7147L42EQ');
+</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>About NVI — Methodology, Mission, Coverage</title>
@@ -293,7 +301,7 @@
   <ul>
     <li><strong>Data:</strong> Frozen foot-traffic snapshot in SQLite — 22 venues × 168 hours, captured April 2026</li>
     <li><strong>Build:</strong> Python 3 reads SQLite, writes <code>web/index.html</code> with all venue data embedded inline</li>
-    <li><strong>Frontend:</strong> Static HTML + vanilla CSS/JS — no framework, no analytics, no cookies, no third-party APIs at runtime</li>
+    <li><strong>Frontend:</strong> Static HTML + vanilla CSS/JS — no framework, no third-party APIs at runtime; only Google Analytics for aggregate page-view stats</li>
     <li><strong>Hosting:</strong> self-hosted on a Contabo VPS via Coolify, served behind Apache + Let's Encrypt</li>
     <li><strong>Recurring cost:</strong> low fixed VPS bill — no per-request API costs, no subscription tiers, no usage spikes</li>
   </ul>
