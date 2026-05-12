@@ -264,7 +264,7 @@ def main() -> None:
         headline_size=200,
         body=["Most of Nairobi sleeps on Wednesdays.",
               "Three spots punch above their weight."],
-        callout="Tribeka . Kiza . Brew Bistro",
+        callout="Sankara . Kiza . Brew Bistro",
         accent=MAGENTA,
     )
 
